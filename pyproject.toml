@@ -49,6 +49,9 @@ dev = [
     "jinja2",
     "numpydoc",
     "myst_parser",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_autodoc_typehints",
 ]
 
 [tool.setuptools]
