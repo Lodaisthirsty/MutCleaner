@@ -1,12 +1,12 @@
 # TidyMut
 [![License badge](https://img.shields.io/badge/License-BSD_3--Clause-yellow?logo=opensourceinitiative&logoColor=white)](https://github.com/xulab-research/TidyMut/blob/main/LICENSE)
 [![PyPI version badge](https://img.shields.io/pypi/v/tidymut?logo=python&logoColor=white&color=orange)](https://pypi.org/project/tidymut/)
-[![Docs](https://github.com/xulab-research/test/actions/workflows/docs.yml/badge.svg)](https://xulab-research.github.io/test/)
+[![Docs](https://github.com/xulab-research/TidyMut/actions/workflows/docs.yml/badge.svg)](https://xulab-research.github.io/TidyMut/)
 
 A comprehensive Python package for processing and analyzing biological sequence data with advanced mutation analysis capabilities.
 
-* **Documentation**: https://xulab-research.github.io/test/
-* **Cleaning Examples**: https://xulab-research.github.io/test/user_guide/cleaners.html
+* **Documentation**: https://xulab-research.github.io/TidyMut/
+* **Cleaning Examples**: https://xulab-research.github.io/TidyMut/user_guide/cleaners.html
 
 ## Overview
 
@@ -39,7 +39,7 @@ pip install -e .
 ```
 
 ## Quick Start
-See [Docs](https://xulab-research.github.io/test/en/latest/user_guide/cleaners.html) for more examples.
+See [Docs](https://xulab-research.github.io/TidyMut/en/latest/user_guide/cleaners.html) for more examples.
 
 ### Supported Datasets
 | Dataset Name    | Reference                                                                           | File                                               | Link                                                                          |
