@@ -7,7 +7,7 @@ name = "tidymut"
 dynamic = ["version"]
 description = "An efficient framework for tidying and standardizing protein mutation data."
 readme = "README.md"
-authors = [{ name = "Yuxiang Tang", email = "845351766@qq.com" }]
+authors = [{ name = "Yuxiang Tang and Ziyu Shi"}]
 license = { file = "LICENSE" }
 requires-python = ">=3.13"
 dependencies = [
@@ -17,7 +17,8 @@ dependencies = [
     "tqdm>=4.60.0",
     "python-dateutil>=2.8.2",
     "tzdata>=2022.7",
-    "requests>=2.30"
+    "requests>=2.30",
+    "openpyxl>=3.1.0"
 ]
 keywords = ["protein", "mutation", "tidy", "framework", "pipeline"]
 classifiers = [
@@ -46,6 +47,8 @@ dev = [
     "gitpython", 
     "pygithub", 
     "jinja2",
+    "numpydoc",
+    "myst_parser",
 ]
 
 [tool.setuptools]
