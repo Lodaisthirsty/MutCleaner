@@ -1,7 +1,7 @@
 # TidyMut
 [![License badge](https://img.shields.io/badge/License-BSD_3--Clause-yellow?logo=opensourceinitiative&logoColor=white)](https://github.com/xulab-research/TidyMut/blob/main/LICENSE)
 [![PyPI version badge](https://img.shields.io/pypi/v/tidymut?logo=python&logoColor=white&color=orange)](https://pypi.org/project/tidymut/)
-[![Docs](https://github.com/xulab-research/TidyMut/actions/workflows/docs.yml/badge.svg)](https://xulab-research.github.io/TidyMut/)
+[![Docs](https://github.com/xulab-research/test/actions/workflows/docs.yml/badge.svg)](https://xulab-research.github.io/test/)
 
 A comprehensive Python package for processing and analyzing biological sequence data with advanced mutation analysis capabilities.
 
