@@ -12,8 +12,8 @@ sys.path.insert(0, os.path.abspath(".."))
 
 
 project = "tidymut"
-copyright = "2025, YukunR"
-author = "YukunR"
+copyright = "2025, YukunR, ZiyuShi"
+author = "YukunR and ZiyuShi"
 release = "v0.8.0"
 
 # -- General configuration ---------------------------------------------------
@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx.ext.doctest",
+    "sphinx.ext.githubpages",
     "myst_parser",
     "sphinx_copybutton",
     "sphinx_design",
