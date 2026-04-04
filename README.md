@@ -24,8 +24,7 @@ TidyMut is designed for bioinformaticians, computational biologists, and researc
 
 ### Requirements
 - Python 3.13+
-- pandas
-- tqdm
+- (All other dependencies are automatically installed via pip)
 
 ### Install via pip
 ```bash

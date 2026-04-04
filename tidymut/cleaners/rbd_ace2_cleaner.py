@@ -16,8 +16,8 @@ from tidymut.cleaners.basic_cleaners import (
     filter_and_clean_data,
     read_dataset,
     validate_mutations,
+    subtract_labels_by_wt,
 )
-from tidymut.cleaners.cdna_proteolysis_custom_cleaners import subtract_labels_by_wt
 from tidymut.cleaners.rbd_custom_cleaners import (
     RBD_ACE2_REFERENCE_SEQUENCES,
     RBD_ACE2_TARGET_NAME_ALIASES,

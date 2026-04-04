@@ -1,4 +1,4 @@
-# tidymut/cleaners/antitoxin_pard3_cleaner.py
+# tidymut/cleaners/cdna_proteolysis_cleaner.py
 from __future__ import annotations
 
 import pandas as pd
@@ -13,17 +13,12 @@ from .basic_cleaners import (
     extract_and_rename_columns,
     filter_and_clean_data,
     convert_data_types,
-    convert_to_mutation_dataset_format,
     validate_mutations,
-    add_column,
-    apply_mutations_to_sequences,
-    average_labels_by_name,
+    convert_to_mutation_dataset_format,
     subtract_labels_by_wt,
+    add_column,
 )
-from .antitoxin_pard3_custom_cleaners import (
-    add_wild_type_sequence,
-    simplify_mutations,
-)
+from .rbd_custom_cleaners import apply_mutations_preserving_wild_type
 
 from ..core.dataset import MutationDataset
 from ..core.pipeline import Pipeline, create_pipeline
@@ -32,9 +27,9 @@ if TYPE_CHECKING:
     from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 __all__ = [
-    "AntitoxinParD3CleanerConfig",
-    "create_antitoxin_pard3_cleaner",
-    "clean_antitoxin_pard3_dataset",
+    "ChitosanaseCleanerConfig",
+    "create_chitosanase_cleaner",
+    "clean_chitosanase_dataset",
 ]
 
 
@@ -47,16 +42,14 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
+class ChitosanaseCleanerConfig(BaseCleanerConfig):
     """
-    Configuration class for Antitoxin dataset cleaner.
-    Inherits from BaseCleanerConfig and adds Antitoxin-specific configuration options.
+    Configuration class for chitosanase dataset cleaner.
+    Inherits from BaseCleanerConfig and adds chitosanase-specific configuration options.
 
-    Simply run `tidymut.download_antitoxin_source_file()` to download the dataset.
+    Simply run `tidymut.download_chitosanase_source_file()` to download the dataset.
 
-    Alternatively, the raw Antitoxin file can be obtained from:
-
-    - Hugging Face: https://huggingface.co/datasets/xulab-research/TidyMut/blob/main/antitoxin/antitoxin.csv
+    Alternatively, the raw chitosanase file can be obtained from:
 
     Attributes
     ----------
@@ -64,56 +57,56 @@ class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
         Mapping from source to target column names
     filters : Dict[str, Callable]
         Filter conditions for data cleaning
-    wt_sequence : str
-        Wildtype sequence for the dataset, used for mutation validation
     type_conversions : Dict[str, str]
         Data type conversion specifications
     validate_mut_workers : int
         Number of workers for mutation validation, set to -1 to use all available CPUs
-    process_workers : int
-        Number of workers for applying mutations to sequences, set to -1 to use all available CPUs
+    validate_wt_workers : int
+        Number of workers for wildtype sequence validation, set to -1 to use all available CPUs
     label_columns : List[str]
         List of score columns to process
     primary_label_column : str
         Primary score column for the dataset
-    pipeline_name : str
-        Name of the cleaning pipeline
     """
 
     # Column mapping configuration
     column_mapping: Dict[str, str] = field(
         default_factory=lambda: {
-            "mutation": "mut_info",
-            "label": "label",
+            "aa_mut": "mut_info",
+            "Tm": "label_chitosanase",
+            "sequence": "wt_sequence",
         }
     )
 
     # Data filtering configuration
     filters: Dict[str, Callable] = field(
         default_factory=lambda: {
-            "label": lambda s: pd.to_numeric(s, errors="coerce").notna()
+            "label_chitosanase": lambda s: pd.to_numeric(
+                s.astype(str).str.strip(), errors="coerce"
+            ).notna()
         }
     )
 
-    # obtained from the article
-    wt_sequence = "MANVEKMSVAVTPQQAAVMREAVEAGEYATASEIVREAVRDWLAKRELRHDDIRRLRQLWDEGKASGRPEPVDFDALRKEARQKLTEVPPNGR"
     # Type conversion configuration
-    type_conversions: Dict[str, str] = field(default_factory=lambda: {"label": "float"})
+    type_conversions: Dict[str, str] = field(
+        default_factory=lambda: {"label_chitosanase": "float"}
+    )
 
     # Mutation validation parameters
     validate_mut_workers: int = 16
 
-    process_workers: int = 16
+    # Wildtype validation parameters
+    validate_wt_workers: int = 16
 
     # Score columns configuration
-    label_columns: List[str] = field(default_factory=lambda: ["label"])
-    primary_label_column: str = "label"
+    label_columns: List[str] = field(default_factory=lambda: ["label_chitosanase"])
+    primary_label_column: str = "label_chitosanase"
 
     # Override default pipeline name
-    pipeline_name: str = "Antitoxin Pipeline"
+    pipeline_name: str = "ChitosanaseCleanerPipeline"
 
     def validate(self) -> None:
-        """Validate Antitoxin-specific configuration parameters
+        """Validate chitosanase-specific configuration parameters
 
         Raises
         ------
@@ -134,25 +127,27 @@ class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
             )
 
         # Validate column mapping
-        required_mappings = {"mutation"}
+        required_mappings = {"aa_mut", "Tm", "sequence"}
         missing = required_mappings - set(self.column_mapping.keys())
         if missing:
             raise ValueError(f"Missing required column mappings: {missing}")
 
 
-def create_antitoxin_pard3_cleaner(
+def create_chitosanase_cleaner(
     dataset_or_path: Optional[Union[pd.DataFrame, str, Path]] = None,
-    config: Optional[Union[AntitoxinParD3CleanerConfig, Dict[str, Any], str, Path]] = None,
+    config: Optional[
+        Union[ChitosanaseCleanerConfig, Dict[str, Any], str, Path]
+    ] = None,
 ) -> Pipeline:
-    """Create Antitoxin dataset cleaning pipeline
+    """Create chitosanase dataset cleaning pipeline
 
     Parameters
     ----------
     dataset_or_path : Optional[Union[pd.DataFrame, str, Path]], default=None
-        Raw dataset DataFrame or file path to Antitoxin dataset.
-    config : Optional[Union[AntitoxinCleanerConfig, Dict[str, Any], str, Path]]
+        Raw dataset DataFrame or file path to chitosanase dataset.
+    config : Optional[Union[ChitosanaseCleanerConfig, Dict[str, Any], str, Path]]
         Configuration for the cleaning pipeline. Can be:
-        - AntitoxinCleanerConfig object
+        - ChitosanaseCleanerConfig object
         - Dictionary with configuration parameters (merged with defaults)
         - Path to JSON configuration file (str or Path)
         - None (uses default configuration)
@@ -171,25 +166,25 @@ def create_antitoxin_pard3_cleaner(
     """
     # Handle configuration parameter
     if config is None:
-        final_config = AntitoxinParD3CleanerConfig()
-    elif isinstance(config, AntitoxinParD3CleanerConfig):
+        final_config = ChitosanaseCleanerConfig()
+    elif isinstance(config, ChitosanaseCleanerConfig):
         final_config = config
     elif isinstance(config, dict):
         # Partial configuration - merge with defaults
-        default_config = AntitoxinParD3CleanerConfig()
+        default_config = ChitosanaseCleanerConfig()
         final_config = default_config.merge(config)
     elif isinstance(config, (str, Path)):
         # Load from file
-        final_config = AntitoxinParD3CleanerConfig.from_json(config)
+        final_config = ChitosanaseCleanerConfig.from_json(config)
     else:
         raise TypeError(
-            f"config must be AntitoxinParD3CleanerConfig, dict, str, Path or None, "
+            f"config must be ChitosanaseCleanerConfig, dict, str, Path or None, "
             f"got {type(config)}"
         )
 
     # Log configuration summary
     logger.info(
-        f"Antitoxin dataset will be cleaned with pipeline: {final_config.pipeline_name}"
+        f"Chitosanase dataset will be cleaned with pipeline: {final_config.pipeline_name}"
     )
     logger.debug(f"Configuration:\n{final_config.get_summary()}")
 
@@ -203,63 +198,42 @@ def create_antitoxin_pard3_cleaner(
                 extract_and_rename_columns,
                 column_mapping=final_config.column_mapping,
             )
+            .delayed_then(filter_and_clean_data, filters=final_config.filters)
             .delayed_then(
-                filter_and_clean_data,
-                filters=final_config.filters,
+                convert_data_types, type_conversions=final_config.type_conversions
             )
             .delayed_then(
-                convert_data_types,
-                type_conversions=final_config.type_conversions,
-            )
-            .delayed_then(add_column, dataset_name="antitoxin", column_name="name")
-            .delayed_then(
-                add_wild_type_sequence,
-                wt_sequence_column="wt_seq",
-                wt_sequence=final_config.wt_sequence,
-            )
-            .delayed_then(
-                simplify_mutations,
-                mutation_column=final_config.column_mapping.get("mutation", "mutation"),
-                mutation_sep=":",
+                add_column,
+                dataset_name="Chitosanase",
+                column_name="name",
             )
             .delayed_then(
                 validate_mutations,
-                mutation_column=final_config.column_mapping.get("mutation", "mutation"),
+                mutation_column=final_config.column_mapping.get("aa_mut", "aa_mut"),
                 mutation_sep=",",
-                is_zero_based=True,
-                exclude_patterns="WT",
+                is_zero_based=False,
+                exclude_patterns=["WT"],
                 num_workers=final_config.validate_mut_workers,
             )
             .delayed_then(
-                average_labels_by_name,
-                name_columns=(
-                    "name",
-                    final_config.column_mapping.get("mutation", "mutation"),
-                ),
-                label_columns=final_config.primary_label_column,
+                apply_mutations_preserving_wild_type,
+                sequence_column=final_config.column_mapping.get("sequence", "sequence"),
+                name_column="name",
+                mutation_column=final_config.column_mapping.get("aa_mut", "aa_mut"),
             )
             .delayed_then(
                 subtract_labels_by_wt,
                 name_column="name",
-                label_columns=final_config.primary_label_column,
-                mutation_column=final_config.column_mapping.get("mutation", "mutation"),
+                label_columns=final_config.label_columns,
+                mutation_column=final_config.column_mapping.get("aa_mut", "aa_mut"),
                 wt_identifier="WT",
                 in_place=True,
             )
             .delayed_then(
-                apply_mutations_to_sequences,
-                sequence_column="wt_seq",
-                name_column="name",
-                mutation_column=final_config.column_mapping.get("mutation", "mutation"),
-                is_zero_based=True,
-                sequence_type="protein",
-                num_workers=final_config.process_workers,
-            )
-            .delayed_then(
                 convert_to_mutation_dataset_format,
                 name_column="name",
-                mutation_column=final_config.column_mapping.get("mutation", "mutation"),
-                sequence_column="wt_seq",
+                mutation_column=final_config.column_mapping.get("aa_mut", "aa_mut"),
+                mutated_sequence_column="mut_seq",
                 label_column=final_config.primary_label_column,
                 is_zero_based=True,
             )
@@ -267,7 +241,7 @@ def create_antitoxin_pard3_cleaner(
 
         # Create pipeline based on dataset_or_path type
         if isinstance(dataset_or_path, (str, Path)):
-            pipeline.add_delayed_step(read_dataset, 0, file_format="csv")
+            pipeline.add_delayed_step(read_dataset, 0)
         elif not isinstance(dataset_or_path, pd.DataFrame):
             raise TypeError(
                 f"dataset_or_path must be pd.DataFrame or str/Path, "
@@ -277,61 +251,65 @@ def create_antitoxin_pard3_cleaner(
         return pipeline
 
     except Exception as e:
-        logger.error(f"Error in creating aav capsid cleaning pipeline: {str(e)}")
-        raise RuntimeError(f"Error in creating aav capsid cleaning pipeline: {str(e)}")
+        logger.error(f"Error in creating chitosanase cleaning pipeline: {str(e)}")
+        raise RuntimeError(
+            f"Error in creating chitosanase cleaning pipeline: {str(e)}"
+        )
 
 
-def clean_antitoxin_pard3_dataset(
+def clean_chitosanase_dataset(
     pipeline: Pipeline,
 ) -> Tuple[Pipeline, MutationDataset]:
-    """Clean Antitoxin dataset using configurable pipeline
+    """Clean chitosanase dataset using configurable pipeline
 
     Parameters
     ----------
     pipeline : Pipeline
-        Antitoxin dataset cleaning pipeline
+        chitosanase dataset cleaning pipeline
 
     Returns
     -------
     Tuple[Pipeline, MutationDataset]
         - Pipeline: The cleaned pipeline
-        - MutationDataset: The cleaned Antitoxin dataset
+        - MutationDataset: The cleaned chitosanase dataset
 
     Examples
     --------
     Use default configuration:
 
-    >>> pipeline = create_antitoxin_cleaner(df)  # df is raw Antitoxin dataset file
+    >>> pipeline = create_chitosanase_cleaner(df)  # df is raw chitosanase dataset file
 
     Use partial configuration:
 
-    >>> pipeline = create_antitoxin_cleaner(df, config={
+    >>> pipeline = create_chitosanase_cleaner(df, config={
     ...     "validate_mut_workers": 8,
     ... })
 
     Load configuration from file:
 
-    >>> pipeline = create_antitoxin_cleaner(df, config="config.json")
-    >>> pipeline, dataset = clean_antitoxin_dataset(pipeline)
+    >>> pipeline = create_chitosanase_cleaner(df, config="config.json")
+    >>> pipeline, dataset = clean_chitosanase_dataset(pipeline)
     """
     try:
         # Run pipeline
         pipeline.execute()
 
         # Extract results
-        antitoxin_dataset_df, antitoxin_ref_seq = pipeline.data
-        antitoxin_dataset = MutationDataset.from_dataframe(
-            antitoxin_dataset_df, antitoxin_ref_seq
+        chitosanase_dataset_df, chitosanase_ref_seq = pipeline.data
+        chitosanase_dataset = MutationDataset.from_dataframe(
+            chitosanase_dataset_df, chitosanase_ref_seq
         )
 
         logger.info(
-            f"Successfully cleaned antitoxin dataset: "
-            f"{len(antitoxin_dataset_df)} mutations from {len(antitoxin_ref_seq)} proteins"
+            f"Successfully cleaned chitosanase dataset: "
+            f"{len(chitosanase_dataset_df)} mutations from {len(chitosanase_ref_seq)} proteins"
         )
 
-        return pipeline, antitoxin_dataset
+        return pipeline, chitosanase_dataset
     except Exception as e:
-        logger.error(f"Error in running antitoxin dataset cleaning pipeline: {str(e)}")
+        logger.error(
+            f"Error in running chitosanase dataset cleaning pipeline: {str(e)}"
+        )
         raise RuntimeError(
-            f"Error in running antitoxin dataset cleaning pipeline: {str(e)}"
+            f"Error in running chitosanase dataset cleaning pipeline: {str(e)}"
         )

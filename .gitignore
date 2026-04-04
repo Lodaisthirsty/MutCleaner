@@ -53,11 +53,13 @@ doc/build/
 doc/source/api/generated/
 doc/source/generated/
 
-# Datasets and outputs
+# Datasets and outputs #
+########################
 dataset/
 clean_dataset/
 outputs/
 validation/
 
-# Logs
+# Logs #
+########
 logs/
