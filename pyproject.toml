@@ -42,7 +42,7 @@ dev = [
     "pytest-cov>=6.0.0",
     "sphinx>=8.0.0",
     "sphinx-autobuild>=2024.10.0",
-    "sphinx_rtd_theme>=3.0.0",
+    "pydata-sphinx-theme",
     "twine>=6.0.0", 
     "gitpython", 
     "pygithub", 
