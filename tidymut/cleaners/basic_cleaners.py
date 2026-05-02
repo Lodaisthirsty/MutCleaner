@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
 __all__ = [
     "read_dataset",
+    "add_columns",
     "merge_columns",
     "split_columns",
     "extract_and_rename_columns",
@@ -55,7 +56,6 @@ __all__ = [
     "convert_to_mutation_dataset_format",
     "replace_in_column",
     "subtract_labels_by_wt",
-    "add_column",
 ]
 
 
@@ -2108,52 +2108,70 @@ def replace_in_column(
 
 
 @pipeline_step
-def add_column(
+def add_columns(
     dataset: pd.DataFrame,
-    dataset_name: str,
-    column_name: str = "protein_name",
+    columns_to_add: Dict[str, Any],
+    overwrite: bool = True,
 ) -> pd.DataFrame:
     """
-    Add a constant-valued column to a DataFrame.
+    Add multiple constant-valued columns to a DataFrame using a dictionary.
 
     Parameters
     ----------
     dataset : pd.DataFrame
         The input DataFrame to which the 'dataset_name' will be added.
-    dataset_name : str
-        Value to assign to the new column for all rows.
-    column_name : str
-        Name of the column to create or overwrite.
-
+    columns_to_add : Dict[str, Any]
+        A dictionary where keys are the new column names and values are the 
+        constant values to assign to all rows in those columns.
+    overwrite : bool, default=True
+        Whether to overwrite existing columns with the same name. If False,
+        a warning will be printed and existing columns will be skipped.
+    
     Returns
     -------
     dataset : pd.DataFrame
-        The DataFrame with an additional column.
+        The DataFrame with the additional columns.
 
     Examples
     --------
     >>> import pandas as pd
     >>> df = pd.DataFrame({
-    >>>     'mut_info' : ['A0G', 'V1D', 'K2A'],
-    >>>     'mut_seq' : ['GVKDF', 'ADKDF', 'AVADF']})
-    >>> df = add_column(df, dataset_name="protein1", column_name="protein_name")
-    >>> df
-      mut_info mut_seq protein_name
-    0      A0G   GVKDF     protein1
-    1      V1D   ADKDF     protein1
-    2      K2A   AVADF     protein1
+    ...     'mut_info' : ['A0G', 'V1D', 'K2A'],
+    ...     'mut_seq' : ['GVKDF', 'ADKDF', 'AVADF']})
+    >>> new_cols = {
+    ...     "name": "protein1",
+    ...     "wt_seq": "AGKDF"
+    ... }
+    >>> df = add_columns(df, columns_to_add=new_cols)
+    >>> print(list(df.columns))
+    ['mut_info', 'mut_seq', 'name', 'wt_seq']
     """
-    if not dataset_name:
-        raise ValueError(f"Missing name {dataset_name}")
+    if not columns_to_add:
+        raise ValueError("The columns dictionary cannot be empty.")
 
-    tqdm.write(f"Adding name {dataset_name} to the column {column_name}")
+    tqdm.write("Adding constant columns...")
+    
+    result = dataset.copy()
+    
+    available_columns = set(result.columns)
 
-    dataset = dataset.copy()
-    dataset[column_name] = dataset_name
+    added_columns_list = []
+    
+    for col, value in columns_to_add.items():
+        if col in available_columns and not overwrite:
+            tqdm.write(f"Warning: Column '{col}' already exists. Skipping.")
+            continue
 
-    tqdm.write(f"Successfully adding name {dataset_name} to the column {column_name}")
+        result[col] = value
+        added_columns_list.append(col)
 
-    return dataset
+    if added_columns_list:
+        columns_str = ", ".join(f"'{col}'" for col in added_columns_list)
+        tqdm.write(f"Successfully added/updated columns: {columns_str}")
+    else:
+        tqdm.write("No new columns were added or updated.")
+
+    return result
 
 
 @multiout_step(main="successful", failed="failed")

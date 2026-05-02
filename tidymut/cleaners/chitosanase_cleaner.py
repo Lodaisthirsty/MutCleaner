@@ -16,7 +16,7 @@ from .basic_cleaners import (
     validate_mutations,
     convert_to_mutation_dataset_format,
     subtract_labels_by_wt,
-    add_column,
+    add_columns,
 )
 from .rbd_custom_cleaners import apply_mutations_preserving_wild_type
 

@@ -13,7 +13,7 @@ from .basic_cleaners import (
     extract_and_rename_columns,
     filter_and_clean_data,
     convert_data_types,
-    add_column,
+    add_columns,
     validate_mutations,
     average_labels_by_name,
     convert_to_mutation_dataset_format,

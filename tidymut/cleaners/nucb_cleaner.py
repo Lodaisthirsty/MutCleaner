@@ -1,4 +1,4 @@
-# tidymut/cleaners/gb_cleaner.py
+# tidymut/cleaners/NucB_cleaner.py
 from __future__ import annotations
 
 import pandas as pd
@@ -10,27 +10,25 @@ import logging
 from .base_config import BaseCleanerConfig
 from .basic_cleaners import (
     read_dataset,
+    add_columns,
+    validate_mutations,
     extract_and_rename_columns,
     filter_and_clean_data,
     convert_data_types,
+    infer_wildtype_sequences,
     convert_to_mutation_dataset_format,
-    add_columns,
     average_labels_by_name,
-    validate_mutations,
-    apply_mutations_to_sequences,
 )
-from .human_myoglobin_custom_cleaners import convert_codon_to_amino_acid
-
 from ..core.dataset import MutationDataset
 from ..core.pipeline import Pipeline, create_pipeline
 
 if TYPE_CHECKING:
-    from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+    from typing import Any, Dict, List, Literal, Optional, Tuple, Union, Callable
 
 __all__ = [
-    "HumanMyoglobinCleanerConfig",
-    "create_human_myoglobin_cleaner",
-    "clean_human_myoglobin_dataset",
+    "NucBCleanerConfig",
+    "create_nucb_cleaner",
+    "clean_nucb_dataset",
 ]
 
 
@@ -43,30 +41,30 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
+class NucBCleanerConfig(BaseCleanerConfig):
     """
-    Configuration class for human Myoglobin dataset cleaner.
-    Inherits from BaseCleanerConfig and adds hMb-specific configuration options.
+    Configuration class for NucB dataset cleaner.
+    Inherits from BaseCleanerConfig and adds NucB-specific configuration options.
+    Simply run `tidymut.download_nucB_source_file()` to download the dataset.
 
-    Simply run `tidymut.download_hMb_source_file()` to download the dataset.
-
-    Alternatively, the raw hMb file can be obtained from:
-
-    - Zenodo: https://zenodo.org/records/7992926, File `Tsuboyama2023_Dataset2_Dataset3_20230416.csv` in `Processed_K50_dG_datasets.zip`
-    - Hugging Face: https://huggingface.co/datasets/xulab-research/TidyMut/blob/main/hMb/hMb.csv
+    Alternatively, the raw NucB file can be obtained from:
 
     Attributes
     ----------
     column_mapping : Dict[str, str]
         Mapping from source to target column names
-    filters : Dict[str, Callable]
+    filters : Dict[str, Any]
         Filter conditions for data cleaning
     type_conversions : Dict[str, str]
         Data type conversion specifications
-    validate_mut_workers : int
-        Number of workers for mutation validation, set to -1 to use all available CPUs
-    process_workers : int
-        Number of workers for parallel processing
+    is_zero_based : bool
+        Whether mutation positions are zero-based
+    validation_workers : int
+        Number of workers for mutation validation
+    infer_wt_workers : int
+        Number of workers for wildtype sequence inference
+    handle_multiple_wt : Literal["error", "first", "separate"]
+        Strategy for handling multiple wildtype sequences
     label_columns : List[str]
         List of score columns to process
     primary_label_column : str
@@ -76,12 +74,13 @@ class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
     # Column mapping configuration
     column_mapping: Dict[str, str] = field(
         default_factory=lambda: {
-            "COD": "codon_mutations",
-            "fitness": "label",
+            "mutant": "mut_info",
+            "DMS_score": "label",
+            "mutated_sequence": "mut_seq",
         }
     )
 
-    # Data filtering configuration
+    # Data filtering configuration - no specific filters needed for TrpB
     filters: Dict[str, Callable] = field(
         default_factory=lambda: {
             "label": lambda s: pd.to_numeric(s, errors="coerce").notna()
@@ -91,13 +90,10 @@ class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
     # Type conversion configuration
     type_conversions: Dict[str, str] = field(default_factory=lambda: {"label": "float"})
 
-    # obtained from the article
-    wt_sequence = "MGLSDGEWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKSEDEMKASEDLKKHGATVLTALGGILKKKGHHEAEIKPLAQSHATKHKIPVKYLEFISECIIQVLQSKHPGDFGADAQGAMNKALELFRKDMASNYKELGFQG"
+    # Wildtype inference parameters
+    infer_wt_workers: int = 16
 
-    # Mutation validation parameters
-    validate_mut_workers: int = 16
-
-    # Processing parameters
+    # Process workers for mutation validation
     process_workers: int = 16
 
     # Score columns configuration
@@ -105,10 +101,10 @@ class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
     primary_label_column: str = "label"
 
     # Override default pipeline name
-    pipeline_name: str = "hMb Cleaning Pipeline"
+    pipeline_name: str = "NucB Cleaning Pipeline"
 
     def validate(self) -> None:
-        """Validate hMb-specific configuration parameters
+        """Validate cDNAProteolysis-specific configuration parameters
 
         Raises
         ------
@@ -129,25 +125,25 @@ class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
             )
 
         # Validate column mapping
-        required_mappings = {"COD", "fitness"}
+        required_mappings = {"mutant", "DMS_score", "mutated_sequence"}
         missing = required_mappings - set(self.column_mapping.keys())
         if missing:
             raise ValueError(f"Missing required column mappings: {missing}")
 
 
-def create_human_myoglobin_cleaner(
-    dataset_or_path: Optional[Union[pd.DataFrame, str, Path]] = None,
-    config: Optional[Union[HumanMyoglobinCleanerConfig, Dict[str, Any], str, Path]] = None,
+def create_nucb_cleaner(
+    dataset_or_path: Union[str, Path],
+    config: Optional[Union[NucBCleanerConfig, Dict[str, Any], str, Path]] = None,
 ) -> Pipeline:
-    """Create human myoglobin dataset cleaning pipeline
+    """Create NucB dataset cleaning pipeline
 
     Parameters
     ----------
     dataset_or_path : Optional[Union[pd.DataFrame, str, Path]], default=None
-        Raw dataset DataFrame or file path to human myoglobin dataset.
-    config : Optional[Union[HumanMyoglobinCleanerConfig, Dict[str, Any], str, Path]]
+        Raw dataset DataFrame or file path to NucB dataset.
+    config : Optional[Union[NucBCleanerConfig, Dict[str, Any], str, Path]]
         Configuration for the cleaning pipeline. Can be:
-        - HumanMyoglobinCleanerConfig object
+        - NucBCleanerConfig object
         - Dictionary with configuration parameters (merged with defaults)
         - Path to JSON configuration file (str or Path)
         - None (uses default configuration)
@@ -164,32 +160,33 @@ def create_human_myoglobin_cleaner(
     ValueError
         If configuration validation fails
     """
+
     # Handle configuration parameter
     if config is None:
-        final_config = HumanMyoglobinCleanerConfig()
-    elif isinstance(config, HumanMyoglobinCleanerConfig):
+        final_config = NucBCleanerConfig()
+    elif isinstance(config, NucBCleanerConfig):
         final_config = config
     elif isinstance(config, dict):
         # Partial configuration - merge with defaults
-        default_config = HumanMyoglobinCleanerConfig()
+        default_config = NucBCleanerConfig()
         final_config = default_config.merge(config)
     elif isinstance(config, (str, Path)):
         # Load from file
-        final_config = HumanMyoglobinCleanerConfig.from_json(config)
+        final_config = NucBCleanerConfig.from_json(config)
     else:
         raise TypeError(
-            f"config must be HumanMyoglobinCleanerConfig, dict, str, Path or None, "
+            f"config must be NucBCleanerConfig, dict, str, Path or None, "
             f"got {type(config)}"
         )
 
     # Log configuration summary
     logger.info(
-        f"Human myoglobin dataset will be cleaned with pipeline: {final_config.pipeline_name}"
+        f"NucB dataset will cleaning with pipeline: {final_config.pipeline_name}"
     )
     logger.debug(f"Configuration:\n{final_config.get_summary()}")
 
     try:
-        # Create cleaning pipeline
+        # Create pipeline
         pipeline = create_pipeline(dataset_or_path, final_config.pipeline_name)
 
         # Add cleaning steps
@@ -198,46 +195,39 @@ def create_human_myoglobin_cleaner(
                 extract_and_rename_columns,
                 column_mapping=final_config.column_mapping,
             )
+            .delayed_then(filter_and_clean_data, filters=final_config.filters)
             .delayed_then(
-                filter_and_clean_data,
-                filters=final_config.filters,
-            )
-            .delayed_then(
-                convert_data_types,
-                type_conversions=final_config.type_conversions,
-            )
-            .delayed_then(add_column, dataset_name="hMb", column_name="name")
-            .delayed_then(
-                add_column,
-                column_name="wt_seq",
-                dataset_name=final_config.wt_sequence,
-            )
-            .delayed_then(
-                convert_codon_to_amino_acid,
-                codon_column="codon_mutations",
-                amino_acid_column="mut_info",
-                drop_codon_column=True,
+                convert_data_types, type_conversions=final_config.type_conversions
             )
             .delayed_then(
                 validate_mutations,
-                mutation_column="mut_info",
-                num_workers=final_config.validate_mut_workers,
-            )
-            .delayed_then(
-                apply_mutations_to_sequences,
-                sequence_column="wt_seq",
+                mutation_column=final_config.column_mapping.get("mutant", "mutant"),
+                mutation_sep=":",
+                is_zero_based=False,
                 num_workers=final_config.process_workers,
             )
             .delayed_then(
+                add_columns,
+                columns_to_add={"name":"NucB"},
+            )
+            .delayed_then(
+                infer_wildtype_sequences,
+                mutation_column=final_config.column_mapping.get("mutant", "mutant"),
+                sequence_column=final_config.column_mapping.get("mutated_sequence", "mutated_sequence"),
+                is_zero_based=True,
+                num_workers=final_config.infer_wt_workers,
+            )
+            .delayed_then(
                 average_labels_by_name,
-                name_columns="mut_info",
-                label_columns=final_config.primary_label_column,
+                name_columns=final_config.column_mapping.get("mutated_sequence", "mutated_sequence"),
+                label_columns=final_config.label_columns,
             )
             .delayed_then(
                 convert_to_mutation_dataset_format,
                 name_column="name",
-                mutation_column="mut_info",
+                mutation_column=final_config.column_mapping.get("mutant", "mutant"),
                 sequence_column="wt_seq",
+                mutated_sequence_column=final_config.column_mapping.get("mutated_sequence", "mutated_sequence"),
                 label_column=final_config.primary_label_column,
                 is_zero_based=True,
             )
@@ -245,7 +235,7 @@ def create_human_myoglobin_cleaner(
 
         # Create pipeline based on dataset_or_path type
         if isinstance(dataset_or_path, (str, Path)):
-            pipeline.add_delayed_step(read_dataset, 0, file_format="csv")
+            pipeline.add_delayed_step(read_dataset, 0)
         elif not isinstance(dataset_or_path, pd.DataFrame):
             raise TypeError(
                 f"dataset_or_path must be pd.DataFrame or str/Path, "
@@ -255,57 +245,57 @@ def create_human_myoglobin_cleaner(
         return pipeline
 
     except Exception as e:
-        logger.error(f"Error in creating human myoglobin cleaning pipeline: {str(e)}")
-        raise RuntimeError(f"Error in creating human myoglobin cleaning pipeline: {str(e)}")
+        logger.error(f"Error in creating NucB cleaning pipeline: {str(e)}")
+        raise RuntimeError(f"Error in creating NucB cleaning pipeline: {str(e)}")
 
 
-def clean_human_myoglobin_dataset(
+def clean_nucb_dataset(
     pipeline: Pipeline,
 ) -> Tuple[Pipeline, MutationDataset]:
-    """Clean human myoglobin dataset using configurable pipeline
+    """Clean NucB dataset using configurable pipeline
 
     Parameters
     ----------
     pipeline : Pipeline
-        Human myoglobin dataset cleaning pipeline
+        NucB dataset cleaning pipeline
 
     Returns
     -------
     Tuple[Pipeline, MutationDataset]
         - Pipeline: The cleaned pipeline
-        - MutationDataset: The cleaned human myoglobin dataset
+        - MutationDataset: The cleaned NucB dataset
 
     Examples
     --------
+    >>> pipeline = create_NucB_cleaner(df)  # df is raw NucB dataset file
     Use default configuration:
 
-    >>> pipeline = create_human_myoglobin_cleaner(df)  # df is raw human myoglobin dataset file
+    >>> pipeline, dataset = clean_NucB_dataset(pipeline)
 
     Use partial configuration:
 
-    >>> pipeline = create_human_myoglobin_cleaner(df, config={
+    >>> pipeline, dataset = clean_NucB_dataset(df, config={
     ...     "validate_mut_workers": 8,
     ... })
 
     Load configuration from file:
 
-    >>> pipeline = create_human_myoglobin_cleaner(df, config="config.json")
-    >>> pipeline, dataset = clean_human_myoglobin_dataset(pipeline)
+    >>> pipeline, dataset = clean_NucB_dataset(df, config="config.json")
     """
     try:
         # Run pipeline
         pipeline.execute()
 
         # Extract results
-        human_myoglobin_dataset_df, human_myoglobin_ref_seq = pipeline.data
-        human_myoglobin_dataset = MutationDataset.from_dataframe(human_myoglobin_dataset_df, human_myoglobin_ref_seq)
+        NucB_dataset_df, NucB_ref_seq = pipeline.data
+        NucB_dataset = MutationDataset.from_dataframe(NucB_dataset_df, NucB_ref_seq)
 
         logger.info(
-            f"Successfully cleaned human myoglobin dataset: "
-            f"{len(human_myoglobin_dataset_df)} mutations from {len(human_myoglobin_ref_seq)} proteins"
+            f"Successfully cleaned NucB dataset: "
+            f"{len(NucB_dataset_df)} mutations from {len(NucB_ref_seq)} proteins"
         )
 
-        return pipeline, human_myoglobin_dataset
+        return pipeline, NucB_dataset
     except Exception as e:
-        logger.error(f"Error in running human myoglobin dataset cleaning pipeline: {str(e)}")
-        raise RuntimeError(f"Error in running human myoglobin dataset cleaning pipeline: {str(e)}")
+        logger.error(f"Error in running NucB dataset cleaning pipeline: {str(e)}")
+        raise RuntimeError(f"Error in running NucB dataset cleaning pipeline: {str(e)}")

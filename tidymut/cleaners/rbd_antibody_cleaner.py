@@ -9,7 +9,7 @@ import pandas as pd
 
 from tidymut.cleaners.base_config import BaseCleanerConfig
 from tidymut.cleaners.basic_cleaners import (
-    add_column,
+    add_columns,
     average_labels_by_name,
     convert_data_types,
     convert_to_mutation_dataset_format,
