@@ -142,7 +142,9 @@ class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
 
 def create_antitoxin_pard3_cleaner(
     dataset_or_path: Optional[Union[pd.DataFrame, str, Path]] = None,
-    config: Optional[Union[AntitoxinParD3CleanerConfig, Dict[str, Any], str, Path]] = None,
+    config: Optional[
+        Union[AntitoxinParD3CleanerConfig, Dict[str, Any], str, Path]
+    ] = None,
 ) -> Pipeline:
     """Create Antitoxin dataset cleaning pipeline
 
@@ -211,7 +213,7 @@ def create_antitoxin_pard3_cleaner(
                 convert_data_types,
                 type_conversions=final_config.type_conversions,
             )
-            .delayed_then(add_column, dataset_name="antitoxin", column_name="name")
+            .delayed_then(add_columns, dataset_name="antitoxin", column_name="name")
             .delayed_then(
                 add_wild_type_sequence,
                 wt_sequence_column="wt_seq",
