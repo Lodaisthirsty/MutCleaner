@@ -137,7 +137,9 @@ class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
 
 def create_human_myoglobin_cleaner(
     dataset_or_path: Optional[Union[pd.DataFrame, str, Path]] = None,
-    config: Optional[Union[HumanMyoglobinCleanerConfig, Dict[str, Any], str, Path]] = None,
+    config: Optional[
+        Union[HumanMyoglobinCleanerConfig, Dict[str, Any], str, Path]
+    ] = None,
 ) -> Pipeline:
     """Create human myoglobin dataset cleaning pipeline
 
@@ -206,11 +208,12 @@ def create_human_myoglobin_cleaner(
                 convert_data_types,
                 type_conversions=final_config.type_conversions,
             )
-            .delayed_then(add_column, dataset_name="hMb", column_name="name")
             .delayed_then(
-                add_column,
-                column_name="wt_seq",
-                dataset_name=final_config.wt_sequence,
+                add_columns,
+                columns_to_add={
+                    "name": "hMb",
+                    "wt_seq": final_config.wt_sequence,
+                },
             )
             .delayed_then(
                 convert_codon_to_amino_acid,
@@ -256,7 +259,9 @@ def create_human_myoglobin_cleaner(
 
     except Exception as e:
         logger.error(f"Error in creating human myoglobin cleaning pipeline: {str(e)}")
-        raise RuntimeError(f"Error in creating human myoglobin cleaning pipeline: {str(e)}")
+        raise RuntimeError(
+            f"Error in creating human myoglobin cleaning pipeline: {str(e)}"
+        )
 
 
 def clean_human_myoglobin_dataset(
@@ -298,7 +303,9 @@ def clean_human_myoglobin_dataset(
 
         # Extract results
         human_myoglobin_dataset_df, human_myoglobin_ref_seq = pipeline.data
-        human_myoglobin_dataset = MutationDataset.from_dataframe(human_myoglobin_dataset_df, human_myoglobin_ref_seq)
+        human_myoglobin_dataset = MutationDataset.from_dataframe(
+            human_myoglobin_dataset_df, human_myoglobin_ref_seq
+        )
 
         logger.info(
             f"Successfully cleaned human myoglobin dataset: "
@@ -307,5 +314,9 @@ def clean_human_myoglobin_dataset(
 
         return pipeline, human_myoglobin_dataset
     except Exception as e:
-        logger.error(f"Error in running human myoglobin dataset cleaning pipeline: {str(e)}")
-        raise RuntimeError(f"Error in running human myoglobin dataset cleaning pipeline: {str(e)}")
+        logger.error(
+            f"Error in running human myoglobin dataset cleaning pipeline: {str(e)}"
+        )
+        raise RuntimeError(
+            f"Error in running human myoglobin dataset cleaning pipeline: {str(e)}"
+        )

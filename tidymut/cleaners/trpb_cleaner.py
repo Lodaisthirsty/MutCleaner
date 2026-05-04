@@ -10,7 +10,7 @@ import logging
 from .base_config import BaseCleanerConfig
 from .basic_cleaners import (
     read_dataset,
-    add_column,
+    add_columns,
     extract_and_rename_columns,
     filter_and_clean_data,
     convert_data_types,
@@ -201,14 +201,8 @@ def create_trpb_cleaner(
                 convert_data_types, type_conversions=final_config.type_conversions
             )
             .delayed_then(
-                add_column,
-                dataset_name=final_config.wt_sequence,
-                column_name="wt_seq",
-            )
-            .delayed_then(
-                add_column,
-                dataset_name="TrpB",
-                column_name="name",
+                add_columns,
+                columns_to_add={"name": "TrpB", "wt_seq": final_config.wt_sequence},
             )
             .delayed_then(
                 infer_mutations_from_sequences,

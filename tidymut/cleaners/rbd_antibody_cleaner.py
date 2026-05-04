@@ -254,9 +254,7 @@ def create_rbd_antibody_cleaner(
                 drop_na_columns=final_config.drop_na_columns,
             )
             .delayed_then(
-                add_column,
-                dataset_name=final_config.wt_sequence,
-                column_name="sequence",
+                add_columns, columns_to_add={"sequence": final_config.wt_sequence}
             )
             .delayed_then(
                 validate_mutations,

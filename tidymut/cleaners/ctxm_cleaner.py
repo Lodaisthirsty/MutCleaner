@@ -201,14 +201,11 @@ def create_ctxm_cleaner(
                 convert_data_types, type_conversions=final_config.type_conversions
             )
             .delayed_then(
-                add_column,
-                dataset_name="CTXM_ampicillin",
-                column_name="name",
-            )
-            .delayed_then(
-                add_column,
-                dataset_name=final_config.wt_sequence,
-                column_name="wt_seq",
+                add_columns,
+                columns_to_add={
+                    "name": "CTXM_ampicillin",
+                    "wt_seq": final_config.wt_sequence,
+                },
             )
             .delayed_then(
                 validate_mutations,

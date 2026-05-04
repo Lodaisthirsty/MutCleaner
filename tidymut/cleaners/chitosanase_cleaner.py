@@ -203,9 +203,8 @@ def create_chitosanase_cleaner(
                 convert_data_types, type_conversions=final_config.type_conversions
             )
             .delayed_then(
-                add_column,
-                dataset_name="Chitosanase",
-                column_name="name",
+                add_columns,
+                columns_to_add={"name": "Chitosanase"},
             )
             .delayed_then(
                 validate_mutations,
