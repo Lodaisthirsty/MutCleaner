@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 import pandas as pd
 from tqdm import tqdm
 
-from tidymut.cleaners.basic_cleaners import apply_mutations_to_sequences
-from tidymut.core.pipeline import multiout_step, pipeline_step
+from ..cleaners.basic_cleaners import apply_mutations_to_sequences
+from ..core.pipeline import multiout_step, pipeline_step
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple

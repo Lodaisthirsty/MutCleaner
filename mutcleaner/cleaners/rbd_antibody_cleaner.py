@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 
-from tidymut.cleaners.base_config import BaseCleanerConfig
-from tidymut.cleaners.basic_cleaners import (
+from .base_config import BaseCleanerConfig
+from .basic_cleaners import (
     add_columns,
     average_labels_by_name,
     convert_data_types,
@@ -19,12 +19,12 @@ from tidymut.cleaners.basic_cleaners import (
     validate_mutations,
     subtract_labels_by_wt,
 )
-from tidymut.cleaners.rbd_custom_cleaners import (
+from .rbd_custom_cleaners import (
     apply_mutations_preserving_wild_type,
     mark_wild_type_by_variant_class,
 )
-from tidymut.core.dataset import MutationDataset
-from tidymut.core.pipeline import Pipeline, create_pipeline
+from ..core.dataset import MutationDataset
+from ..core.pipeline import Pipeline, create_pipeline
 
 if TYPE_CHECKING:
     from typing import Any, Callable, Dict, List, Optional, Tuple, Union
