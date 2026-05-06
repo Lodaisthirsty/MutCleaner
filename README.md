@@ -229,8 +229,7 @@ If you use MutCleaner in your research, please cite:
 ```bibtex
 @software{mutcleaner,
   title={
-    MutCleaner: An extensible Python toolkit for cleaning and standardizing
-    biological mutation datasets
+    MutCleaner: An efficient framework for cleaning, standardizing, and processing biological mutation data.
   },
   author={YukunR and Ziyu Shi},
   year={2026},

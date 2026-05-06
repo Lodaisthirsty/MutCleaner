@@ -3,24 +3,37 @@ requires = ["setuptools>=77.0.3", "setuptools_scm[toml]>=7.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tidymut"
+name = "mutcleaner"
 dynamic = ["version"]
-description = "An efficient framework for tidying and standardizing protein mutation data."
+description = "An efficient framework for cleaning, standardizing, and processing biological mutation data."
 readme = "README.md"
-authors = [{ name = "Yuxiang Tang and Ziyu Shi"}]
-license = { file = "LICENSE" }
+authors = [
+    { name = "Yuxiang Tang" },
+    { name = "Ziyu Shi" },
+]
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
     "joblib>=1.5.0",
     "numpy>=2.1.0",
     "pandas>=2.2.0",
     "tqdm>=4.60.0",
-    "python-dateutil>=2.8.2",
-    "tzdata>=2022.7",
     "requests>=2.30",
     "openpyxl>=3.1.0"
 ]
-keywords = ["protein", "mutation", "tidy", "framework", "pipeline"]
+keywords = [
+    "mutation",
+    "sequence",
+    "bioinformatics",
+    "data-cleaning",
+    "standardization",
+    "protein",
+    "codon",
+    "DNA",
+    "RNA",
+    "DMS",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -33,7 +46,7 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/xulab-research/TidyMut"
+Repository = "https://github.com/xulab-research/MutCleaner"
 
 [project.optional-dependencies]
 test = ["pytest>=8.0.0", "pytest-cov>=6.0.0"]
@@ -55,8 +68,11 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["tidymut"]
+packages = ["mutcleaner"]
 
 [tool.setuptools_scm]
-version_scheme = "post-release"
+version_scheme = "no-guess-dev"
 local_scheme = "no-local-version"
+
+[tool.setuptools.package-data]
+mutcleaner = ["py.typed"]
