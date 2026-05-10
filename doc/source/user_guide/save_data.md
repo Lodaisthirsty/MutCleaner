@@ -23,7 +23,7 @@ This guide provides usage examples for saving cleaned datasets and cleaning arti
 ### Main idea
 
 - **Main dataset** → use `dataset.save(path)`  
-  → stored in the **tidymut format** (default `save_type="tidymut"`), which can be reloaded directly by tidymut.
+  → stored in the **mutcleaner format** (default `save_type="mutcleaner"`), which can be reloaded directly by mutcleaner.
 - **Filtered / discarded / intermediate rows** (“artifacts”) → use `cleaning_pipeline.save_artifacts(path)`  
   → saved as a single **pickle** file (`.pkl`) containing multiple DataFrames.  
   → since pickle is binary and not convenient to view in VS Code, we **recommend reading it back in Python and exporting individual tables to CSV**.
@@ -37,10 +37,10 @@ You have already cleaned the raw data using the corresponding cleaning pipeline
 
 ## Common Patterns
 
-### Save the main cleaned dataset (tidymut format)
+### Save the main cleaned dataset (mutcleaner format)
 
 ```python
-# Default: save_type="tidymut"
+# Default: save_type="mutcleaner"
 dataset.save("path/to/output_dir")
 ```
 

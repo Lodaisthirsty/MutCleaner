@@ -1,4 +1,4 @@
-# tidymut/utils/__init__.py
+"""Utility functions for mutation and sequence processing."""
 
 from .data_source import (
     list_datasets_with_built_in_cleaners,

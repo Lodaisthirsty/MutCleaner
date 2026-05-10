@@ -97,6 +97,7 @@ class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
 
     # obtained from the article
     wt_sequence = "MANVEKMSVAVTPQQAAVMREAVEAGEYATASEIVREAVRDWLAKRELRHDDIRRLRQLWDEGKASGRPEPVDFDALRKEARQKLTEVPPNGR"
+
     # Type conversion configuration
     type_conversions: Dict[str, str] = field(default_factory=lambda: {"label": "float"})
 
@@ -107,6 +108,7 @@ class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
 
     # Score columns configuration
     label_columns: List[str] = field(default_factory=lambda: ["label"])
+    
     primary_label_column: str = "label"
 
     # Override default pipeline name

@@ -24,7 +24,7 @@ This guide provides usage examples for data cleaning modules organized by databa
 ## Prerequisites
 
 ```bash
-pip install tidymut
+pip install mutcleaner
 ```
 
 ---
@@ -32,13 +32,13 @@ pip install tidymut
 ## Human Domainome Database
 
 ### File Preparation
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_human_domainome_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_human_domainome_source_file` for details):
 ```python
-from tidymut import download_human_domainome_source_file
+from mutcleaner import download_human_domainome_source_file
 filepaths = download_human_domainome_source_file("path/to/target/folder")
 ```
 
-Alternatively, you can download it from [Nature](https://www.nature.com/articles/s41586-024-08370-4) or [Hugging Face](https://huggingface.co/datasets/xulab-research/TidyMut/tree/main/human_domainome) (See `SupplementaryTable2.txt` or `SupplementaryTable4.txt`)
+Alternatively, you can download it from [Nature](https://www.nature.com/articles/s41586-024-08370-4) or [Hugging Face](https://huggingface.co/datasets/xulab-research/mutcleaner/tree/main/human_domainome) (See `SupplementaryTable2.txt` or `SupplementaryTable4.txt`)
 
 The Hugging Face dataset already includes the reference FASTA. If you are not using that source, you’ll need to provide the FASTA yourself (i.e., the reviewed Human (9606) proteome from  [UNIPROT](
 https://rest.uniprot.org/uniprotkb/stream?download=true&format=fasta&query=%28*%29+AND+%28model_organism%3A9606%29+AND+%28reviewed%3Atrue%29)).
@@ -48,7 +48,7 @@ https://rest.uniprot.org/uniprotkb/stream?download=true&format=fasta&query=%28*%
 **Cleaning Pipeline**
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_human_domainome_sup2_cleaner, 
     clean_human_domainome_sup2_dataset
 )
@@ -62,14 +62,14 @@ hd_cleaning_pipeline, hd_dataset = clean_human_domainome_sup2_dataset(hd_cleanin
 
 **Advanced Settings**
 
-See {py:func}`tidymut.cleaners.HumanDomainomeSup2CleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.HumanDomainomeSup2CleanerConfig` for details.
 
 ### SupplementaryTable4 Cleaner
 
 **Cleaning Pipeline**
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_human_domainome_sup4_cleaner, 
     clean_human_domainome_sup4_dataset
 )
@@ -84,27 +84,27 @@ hd_cleaning_pipeline, hd_dataset = clean_human_domainome_sup4_dataset(hd_cleanin
 
 **Advanced Settings**
 
-See {py:func}`tidymut.cleaners.HumanDomainomeSup4CleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.HumanDomainomeSup4CleanerConfig` for details.
 
 ---
 
 ## Protein Gym Database
 
 ### File Preparation
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_protein_gym_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_protein_gym_source_file` for details):
 ```python
-from tidymut import download_protein_gym_source_file
+from mutcleaner import download_protein_gym_source_file
 filepaths = download_protein_gym_source_file("path/to/target/folder")
 ```
 
-Alternatively, you can download it from [ProteinGym](https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/DMS_ProteinGym_substitutions.zip) or [Hugging Face](https://huggingface.co/datasets/xulab-research/TidyMut/tree/main/ProteinGym_DMS_substitutions)
+Alternatively, you can download it from [ProteinGym](https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/DMS_ProteinGym_substitutions.zip) or [Hugging Face](https://huggingface.co/datasets/xulab-research/mutcleaner/tree/main/ProteinGym_DMS_substitutions)
 
 ### Basic Usage
 
 **Cleaning Pipeline**
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_protein_gym_cleaner,
     clean_protein_gym_dataset
 )
@@ -118,25 +118,25 @@ pg_cleaning_pipeline, pg_dataset = clean_protein_gym_dataset(pg_cleaning_pipelin
 
 **Advanced Settings**
 
-See {py:func}`tidymut.cleaners.ProteinGymCleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.ProteinGymCleanerConfig` for details.
 
 ## cDNA Proteolysis Database
 
 ### File Preparation
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_cdna_proteolysis_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_cdna_proteolysis_source_file` for details):
 ```python
-from tidymut import download_cdna_proteolysis_source_file
+from mutcleaner import download_cdna_proteolysis_source_file
 filepaths = download_cdna_proteolysis_source_file("path/to/target/folder")
 ```
 
-Alternatively, you can download it from [Zenodo](https://zenodo.org/records/7992926) ("'Tsuboyama2023_Dataset2_Dataset3_20230416.csv' in 'Processed_K50_dG_datasets.zip'") or [Hugging Face](https://huggingface.co/datasets/xulab-research/TidyMut/tree/main/cDNA_proteolysis)
+Alternatively, you can download it from [Zenodo](https://zenodo.org/records/7992926) ("'Tsuboyama2023_Dataset2_Dataset3_20230416.csv' in 'Processed_K50_dG_datasets.zip'") or [Hugging Face](https://huggingface.co/datasets/xulab-research/mutcleaner/tree/main/cDNA_proteolysis)
 
 ### ΔΔG as Label (Default Pipeline)
 
 **Cleaning Pipeline**
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_cdna_proteolysis_cleaner,
     clean_cdna_proteolysis_dataset
 )
@@ -152,7 +152,7 @@ cdnap_cleaning_pipeline, cdnap_dataset = clean_cdna_proteolysis_dataset(cdnap_cl
 
 **Cleaning Pipeline**
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     CDNAProteolysisCleanerConfig, 
     create_cdna_proteolysis_cleaner,
     clean_cdna_proteolysis_dataset
@@ -178,9 +178,9 @@ cdnap_cleaning_pipeline, cdnap_dataset = clean_cdna_proteolysis_dataset(cdnap_cl
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_ddg_dtm_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_ddg_dtm_source_file` for details):
 ```python
-from tidymut import download_ddg_dtm_source_file
+from mutcleaner import download_ddg_dtm_source_file
 
 # Download all datasets
 filepaths = download_ddg_dtm_source_file("path/to/target/folder")
@@ -191,10 +191,10 @@ filepath = download_ddg_dtm_source_file("path/to/target/folder", sub_dataset = "
 
 ### Basic Usage
 
-{py:func}`tidymut.cleaners.ddg_dtm_cleaners.create_ddg_dtm_cleaner` can automatically recognize the label column (ddG or dTm). For example:
+{py:func}`mutcleaner.cleaners.ddg_dtm_cleaners.create_ddg_dtm_cleaner` can automatically recognize the label column (ddG or dTm). For example:
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_ddg_dtm_cleaner,
     clean_ddg_dtm_dataset
 )
@@ -209,22 +209,22 @@ ddgdtm_cleaning_pipeline, ddgdtm_dataset = clean_ddg_dtm_dataset(ddgdtm_cleaning
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.DdgDtmCleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.DdgDtmCleanerConfig` for details.
 
 ## ArchStabMS1E10 Datasets
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_archstabms1e10_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_archstabms1e10_source_file` for details):
 ```python
-from tidymut import download_archstabms1e10_source_file
+from mutcleaner import download_archstabms1e10_source_file
 filepaths = download_archstabms1e10_source_file("path/to/target/folder")
 ```
 
 ### Basic Usage
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_archstabms_1e10_cleaner,
     clean_archstabms_1e10_dataset
 )
@@ -239,22 +239,22 @@ archstabms_cleaning_pipeline, archstabms_dataset = clean_archstabms_1e10_dataset
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.ArchStabMS1E10CleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.ArchStabMS1E10CleanerConfig` for details.
 
 ## Antitoxin ParD3
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_antitoxin_pard3_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_antitoxin_pard3_source_file` for details):
 ```python
-from tidymut import download_antitoxin_pard3_source_file
+from mutcleaner import download_antitoxin_pard3_source_file
 filepaths = download_antitoxin_pard3_source_file("path/to/target/folder")
 ```
 
 ### Basic Usage
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_antitoxin_pard3_cleaner,
     clean_antitoxin_pard3_dataset
 )
@@ -269,22 +269,22 @@ antitoxin_pard3_cleaning_pipeline, antitoxin_pard3_dataset = clean_antitoxin_par
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.AntitoxinParD3CleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.AntitoxinParD3CleanerConfig` for details.
 
 ## TrpB Datasets
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_trpb_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_trpb_source_file` for details):
 ```python
-from tidymut import download_trpb_source_file
+from mutcleaner import download_trpb_source_file
 filepaths = download_trpb_source_file("path/to/target/folder")
 ```
 
 ### Basic Usage
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_trpb_cleaner,
     clean_trpb_dataset
 )
@@ -299,23 +299,23 @@ trpB_cleaning_pipeline, trpB_dataset = clean_trpb_dataset(trpB_cleaning_pipeline
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.TrpBCleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.TrpBCleanerConfig` for details.
 
 ## Human Myoglobin Datasets
 
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_human_myoglobin_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_human_myoglobin_source_file` for details):
 ```python
-from tidymut import download_human_myoglobin_source_file
+from mutcleaner import download_human_myoglobin_source_file
 filepaths = download_human_myoglobin_source_file("path/to/target/folder")
 ```
 
 ### Basic Usage
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_trpb_cleaner,
     clean_trpb_dataset
 )
@@ -330,23 +330,23 @@ human_myoglobin_cleaning_pipeline, human_myoglobin_dataset = clean_trpb_dataset(
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.HumanMyoglobinCleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.HumanMyoglobinCleanerConfig` for details.
 
 ## CTXM DataBase
 
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`tidymut.utils.download_ctxm_source_file` for details):
+You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_ctxm_source_file` for details):
 ```python
-from tidymut import download_ctxm_source_file
+from mutcleaner import download_ctxm_source_file
 filepaths = download_ctxm_source_file("path/to/target/folder")
 ```
 
 ### Basic Usage
 
 ```python
-from tidymut.cleaners import (
+from mutcleaner.cleaners import (
     create_ctxm_cleaner,
     clean_ctxm_dataset,
 )
@@ -361,23 +361,23 @@ ctxm_cleaning_pipeline, ctxm_dataset = clean_trpb_dataset(ctxm_cleaning_pipeline
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.CTXMCleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.CTXMCleanerConfig` for details.
 
 
 ## RBD ACE2 Database
 
 ### File Preparation
 
-You can download the source file directly by running (see {py:func}`tidymut.utils.download_rbd_ace2_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_rbd_ace2_source_file` for details):
 ```python
-from tidymut import download_rbd_ace2_source_file
+from mutcleaner import download_rbd_ace2_source_file
 filepaths = download_rbd_ace2_source_file("path/to/target/folder")
 ```
 
 You can also download and process a specific sub-dataset:
 
 ```python
-from tidymut import download_rbd_ace2_source_file
+from mutcleaner import download_rbd_ace2_source_file
 filepaths = download_rbd_ace2_source_file(
     "path/to/target/folder",
     sub_dataset="Omicron_EG5_FLip_BA286",
@@ -396,8 +396,8 @@ Alternatively, you can download it from [Hugging Face](https://huggingface.co/da
 ### Basic Usage
 
 ```python
-from tidymut import download_rbd_ace2_source_file
-from tidymut.cleaners import clean_rbd_ace2_dataset, create_rbd_ace2_cleaner
+from mutcleaner import download_rbd_ace2_source_file
+from mutcleaner.cleaners import clean_rbd_ace2_dataset, create_rbd_ace2_cleaner
 
 filepaths = download_rbd_ace2_source_file(
     "path/to/target/folder",
@@ -413,22 +413,22 @@ rbd_ace2_cleaning_pipeline, rbd_ace2_dataset = clean_rbd_ace2_dataset(
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.RBDACE2CleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.RBDACE2CleanerConfig` for details.
 
 ## RBD Antibody Database
 
 ### File Preparation
 
-You can download the source file directly by running (see {py:func}`tidymut.utils.download_rbd_antibody_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_rbd_antibody_source_file` for details):
 ```python
-from tidymut import download_rbd_antibody_source_file
+from mutcleaner import download_rbd_antibody_source_file
 filepaths = download_rbd_antibody_source_file("path/to/target/folder")
 ```
 
 You can also download and process a specific sub-dataset:
 
 ```python
-from tidymut import download_rbd_antibody_source_file
+from mutcleaner import download_rbd_antibody_source_file
 filepaths = download_rbd_antibody_source_file(
     "path/to/target/folder",
     sub_dataset="AZ_Abs",
@@ -448,8 +448,8 @@ Alternatively, you can download it from [Hugging Face](https://huggingface.co/da
 ### Basic Usage
 
 ```python
-from tidymut import download_rbd_antibody_source_file
-from tidymut.cleaners import clean_rbd_antibody_dataset, create_rbd_antibody_cleaner
+from mutcleaner import download_rbd_antibody_source_file
+from mutcleaner.cleaners import clean_rbd_antibody_dataset, create_rbd_antibody_cleaner
 
 filepaths = download_rbd_antibody_source_file(
     "path/to/target/folder",
@@ -465,4 +465,4 @@ rbd_antibody_cleaning_pipeline, rbd_antibody_dataset = clean_rbd_antibody_datase
 
 ### Advanced Settings
 
-See {py:func}`tidymut.cleaners.RBDAntibodyCleanerConfig` for details.
+See {py:func}`mutcleaner.cleaners.RBDAntibodyCleanerConfig` for details.

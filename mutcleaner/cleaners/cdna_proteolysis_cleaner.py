@@ -1,4 +1,4 @@
-# tidymut/cleaners/cdna_proteolysis_cleaner.py
+# mutcleaner/cleaners/cdna_proteolysis_cleaner.py
 from __future__ import annotations
 
 import pandas as pd
@@ -88,7 +88,7 @@ class CDNAProteolysisCleanerConfig(BaseCleanerConfig):
     filters: Dict[str, Callable] = field(
         default_factory=lambda: {
             "label_cDNAProteolysis": lambda s: pd.to_numeric(
-                s.astype(str).str.strip(), errors="coerce"
+                s, errors="coerce"
             ).notna()
         }
     )

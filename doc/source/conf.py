@@ -1,23 +1,13 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-import os
+from pathlib import Path
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
+project_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, f"{project_root}")
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-
-project = "tidymut"
+project = "mutcleaner"
 copyright = "2025, YukunR, ZiyuShi"
 author = "YukunR and ZiyuShi"
 release = "v0.8.0"
-
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     "sphinx.ext.autodoc",
@@ -33,8 +23,7 @@ extensions = [
     "sphinx_autodoc_typehints",
 ]
 
-# numpydoc configuration
-napoleon_numpy_docstring = True
+
 
 # autosummary configuration
 autosummary_generate = True
@@ -48,9 +37,6 @@ autodoc_default_options = {
 
 # MyST configuration
 myst_enable_extensions = ["colon_fence", "deflist"]
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]

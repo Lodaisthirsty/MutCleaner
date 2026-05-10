@@ -7,6 +7,6 @@ API Reference
    :toctree: generated
    :recursive:
 
-   tidymut.cleaners
-   tidymut.core
-   tidymut.utils
+   mutcleaner.cleaners
+   mutcleaner.core
+   mutcleaner.utils
