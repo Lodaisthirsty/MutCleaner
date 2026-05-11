@@ -58,26 +58,28 @@ See the [Data Cleaners Usage Guide](https://xulab-research.github.io/MutCleaner/
 
 | Dataset Name    | Reference                                                                           | File                                               | Link                                                                          |
 | --------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------- |
-| cDNAProteolysis | Mega-scale experimental analysis of protein folding stability in biology and design | Tsuboyama2023_Dataset2_Dataset3_20230416.csv       | https://zenodo.org/records/7992926                                            |
+| Human Domainome Dataset  | Site-saturation mutagenesis of 500 human protein domains                            | SupplementaryTable2.txt or SupplementaryTable4.txt | https://www.nature.com/articles/s41586-024-08370-4                            |
 | ProteinGym      | ProteinGym: Large-Scale Benchmarks for Protein Design and Fitness Prediction        | DMS_ProteinGym_substitutions.zip                   | https://proteingym.org/download                                               |
-| HumanDomainome  | Site-saturation mutagenesis of 500 human protein domains                            | SupplementaryTable2.txt or SupplementaryTable4.txt | https://www.nature.com/articles/s41586-024-08370-4                            |
-| ddG             | Improving the prediction of protein stability changes upon mutations by geometric learning and a pre-training strategy                                                                                | M1261.csv, S461.csv, S669.csv, S783.csv, S8754.csv | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/ddG_datasets |
-| dTm             | Improving the prediction of protein stability changes upon mutations by geometric learning and a pre-training strategy                                                                                | S4346.csv, S557.csv, S571.csv                      | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/dTm_datasets |
-| ArchStabMS1E10  | The genetic architecture of protein stability                                       | ArchStabMS_1E10.csv                                | https://huggingface.co/datasets/xulab-research/MutCleaner/blob/main/archstabms1e_10/archstabms_1e10.csv |
-| Antitoxin ParD3 | Protein design using structure-based residue preferences                            | Antitoxin_ParD3.csv                                | https://huggingface.co/datasets/xulab-research/MutCleaner/blob/main/AntitoxinParD3 |
-| CTXM            | Network of epistatic interactions in an enzyme active site revealed by DMS          | CTXM_cefotaxime.csv or CTXM_ampicillin.csv         | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/CTXM |
-| hMb             | Decoding Stability and Epistasis in Human Myoglobin by Deep Mutational Scanning and Codon-level Machine Learning | Human_Myoglobin.csv | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/HumanMyoglobin |
-| TrpB            | A combinatorially complete epistatic fitness landscape in an enzyme active site     | TrpB.csv                                           | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/TrpB |
+| cDNA Proteolysis Dataset | Mega-scale experimental analysis of protein folding stability in biology and design | Tsuboyama2023_Dataset2_Dataset3_20230416.csv       | https://zenodo.org/records/7992926                                            |
+| ddG dataset | Improving the prediction of protein stability changes upon mutations by geometric learning and a pre-training strategy                                                                                | M1261.csv, S461.csv, S669.csv, S783.csv, S8754.csv | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/ddG_datasets |
+| dTm dataset | Improving the prediction of protein stability changes upon mutations by geometric learning and a pre-training strategy                                                                                | S4346.csv, S557.csv, S571.csv                      | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/dTm_datasets |
+| ArchStabMS1E10 Epistasis Dataset  | The genetic architecture of protein stability                                       | ArchStabMS_1E10.csv                                | https://huggingface.co/datasets/xulab-research/MutCleaner/blob/main/archstabms1e_10/archstabms_1e10.csv |
+| Antitoxin ParD3 Epistasis Dataset | Protein design using structure-based residue preferences                            | Antitoxin_ParD3.csv                                | https://huggingface.co/datasets/xulab-research/MutCleaner/blob/main/AntitoxinParD3 |
+| TrpB Epistasis Dataset | A combinatorially complete epistatic fitness landscape in an enzyme active site     | TrpB.csv                                           | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/TrpB |
+| Human Myoglobin Epistasis Dataset | Decoding Stability and Epistasis in Human Myoglobin by Deep Mutational Scanning and Codon-level Machine Learning | Human_Myoglobin.csv | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/HumanMyoglobin |
+| CTXM Epistasis Dataset | Network of epistatic interactions in an enzyme active site revealed by DMS          | CTXM_cefotaxime.csv or CTXM_ampicillin.csv         | https://huggingface.co/datasets/xulab-research/MutCleaner/tree/main/CTXM |
 
-### Processing cDNAProteolysis Dataset
 
-Here's a complete example demonstrating MutCleaner's capabilities with the cDNAProteolysis mutation dataset:
+
+### Processing cDNA Proteolysis Dataset
+
+Here's a complete example demonstrating MutCleaner's capabilities with the cDNA Proteolysis mutation dataset:
 
 ```python
 from mutcleaner import cdna_proteolysis_cleaner
 from mutcleaner import download_cdna_proteolysis_source_file
 
-# Create a cDNAProteolysis cleaning pipeline using MutCleaner's default pipeline.
+# Create a cDNA Proteolysis cleaning pipeline using MutCleaner's default pipeline.
 cdna_proteolysis_filepath = download_cdna_proteolysis_source_file(
     "dir_path",
     "file_name",
