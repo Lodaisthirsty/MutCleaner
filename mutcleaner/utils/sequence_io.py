@@ -1,4 +1,4 @@
-# tidymut/utils/sequence_io.py
+# mutcleaner/utils/sequence_io.py
 """Utilities for reading and writing sequence files without BioPython dependency."""
 from __future__ import annotations
 

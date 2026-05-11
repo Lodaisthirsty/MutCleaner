@@ -1,16 +1,16 @@
-# tidymut/core/types.py
-"""Type variables used across tidymut.
+# mutcleaner/core/types.py
+"""Type variables used across mutcleaner.
 
 Attributes
 ----------
 SequenceType : typing.TypeVar
-    Type variable bound to :class:`~tidymut.core.sequence.BaseSequence`.
+    Type variable bound to :class:`~mutcleaner.core.sequence.BaseSequence`.
 MutationType : typing.TypeVar
-    Bound to :class:`~tidymut.core.mutation.BaseMutation`.
+    Bound to :class:`~mutcleaner.core.mutation.BaseMutation`.
 MutationSetType : typing.TypeVar
-    Bound to :class:`~tidymut.core.sequence.MutationSet`.
+    Bound to :class:`~mutcleaner.core.sequence.MutationSet`.
 CleanerConfigType : typing.TypeVar
-    Bound to :class:`~tidymut.cleaners.base_config.BaseCleanerConfig`.
+    Bound to :class:`~mutcleaner.cleaners.base_config.BaseCleanerConfig`.
 """
 from __future__ import annotations
 

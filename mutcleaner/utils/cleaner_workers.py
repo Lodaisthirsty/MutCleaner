@@ -1,4 +1,4 @@
-# tidymut/utils/cleaner_workers.py
+# mutcleaner/utils/cleaner_workers.py
 from __future__ import annotations
 
 import pandas as pd

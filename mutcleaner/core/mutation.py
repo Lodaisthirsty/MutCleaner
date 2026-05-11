@@ -1,4 +1,4 @@
-# tidymut/core/mutation.py
+# mutcleaner/core/mutation.py
 from __future__ import annotations
 
 import re

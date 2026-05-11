@@ -1,4 +1,4 @@
-# tidymut/utils/raw_data_downloader.py
+# mutcleaner/utils/raw_data_downloader.py
 from __future__ import annotations
 
 import hashlib

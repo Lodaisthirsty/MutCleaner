@@ -1,4 +1,4 @@
-# tidymut/core/sequence.py
+# mutcleaner/core/sequence.py
 from __future__ import annotations
 
 import warnings

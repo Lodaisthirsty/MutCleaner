@@ -1,4 +1,4 @@
-# tidymut/utils/data_source.py
+# mutcleaner/utils/data_source.py
 
 DATASETS = {
     "cDNAProteolysis": {

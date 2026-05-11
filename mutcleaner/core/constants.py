@@ -1,5 +1,5 @@
-# tidymut/core/constants.py
-"""Alphabet and genetic-code constants used across tidymut.
+# mutcleaner/core/constants.py
+"""Alphabet and genetic-code constants used across mutcleaner.
 
 This module collects IUPAC alphabets for DNA/RNA/amino acids, base-complement
 mappings, 1↔3 letter amino-acid code conversions, and the standard genetic code
@@ -24,15 +24,15 @@ Attributes
 ----------
 STANDARD_DNA_BASES : set of str
     Canonical DNA bases (``{'A','T','C','G'}``).
-AMBIGUOUSE_DNA_BASES : set of str
+AMBIGUOUS_DNA_BASES : set of str
     IUPAC ambiguous DNA symbols (e.g. ``'R','Y','S','W','K','M','B','D','H','V','N'``).
 STANDARD_RNA_BASES : set of str
     Canonical RNA bases (``{'A','U','C','G'}``).
-AMBIGUOUSE_RNA_BASES : set of str
+AMBIGUOUS_RNA_BASES : set of str
     IUPAC ambiguous RNA symbols.
 STANDARD_AMINO_ACIDS : set of str
     20 standard amino-acid one-letter codes.
-AMBIGUOUSE_AMINO_ACIDS : set of str
+AMBIGUOUS_AMINO_ACIDS : set of str
     Ambiguous/non-standard amino-acid symbols (e.g. ``'B','Z','X','J','U','O'``).
 
 DNA_BASE_COMPLEMENTS : dict[str, str]
@@ -41,9 +41,9 @@ RNA_BASE_COMPLEMENTS : dict[str, str]
     RNA Watson-Crick complements.
 
 AA3_TO_1 : dict[str, str]
-    Amino-acid 3-letter → 1-letter code map (case-tolerant; includes ``'*' → 'Ter'``).
+    Amino-acid 3-letter → 1-letter code map (case-tolerant; includes ``'TER' → '*'``).
 AA1_TO_3 : dict[str, str]
-    Amino-acid 1-letter → 3-letter code map (includes stop ``'*' → 'Ter'``).
+    Amino-acid 1-letter → 3-letter code map (includes stop ``'*' → 'TER'``).
 
 STANDARD_GENETIC_CODE_DNA : dict[str, str]
     DNA codon table (triplet of ``ATCG`` → ``ACDEFGHIKLMNPQRSTVWY*``).
@@ -59,14 +59,14 @@ STANDARD_START_CODONS_RNA : set[str]
 # fmt: off
 # ==== Alphabet Constants ====
 STANDARD_DNA_BASES = {"A", "T", "C", "G"}
-AMBIGUOUSE_DNA_BASES = {"R", "Y", "S", "W", "K", "M", "B", "D", "H", "V", "N"}
+AMBIGUOUS_DNA_BASES = {"R", "Y", "S", "W", "K", "M", "B", "D", "H", "V", "N"}
 STANDARD_RNA_BASES = {"A", "U", "C", "G"}
-AMBIGUOUSE_RNA_BASES = {"R", "Y", "S", "W", "K", "M", "B", "D", "H", "V", "N"}
+AMBIGUOUS_RNA_BASES = {"R", "Y", "S", "W", "K", "M", "B", "D", "H", "V", "N"}
 STANDARD_AMINO_ACIDS = {
     "A", "C", "D", "E", "F", "G", "H", "I", "K", "L", 
     "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y"
 }
-AMBIGUOUSE_AMINO_ACIDS = {"B", "Z", "X", "J", "U", "O"}
+AMBIGUOUS_AMINO_ACIDS = {"B", "Z", "X", "J", "U", "O"}
 
 # ==== Base Conversion ====
 DNA_BASE_COMPLEMENTS = {"A": "T", "T": "A", "C": "G", "G": "C", "N": "N"}
@@ -78,12 +78,12 @@ AA3_TO_1 = {
     "GLY": "G", "HIS": "H", "ILE": "I", "LEU": "L", "LYS": "K", 
     "MET": "M", "ASN": "N", "PRO": "P", "GLN": "Q", "ARG": "R",
     "SER": "S", "THR": "T", "VAL": "V", "TRP": "W", "TYR": "Y",
-
+    "TER": "*",
     "Ala": "A", "Cys": "C", "Asp": "D", "Glu": "E", "Phe": "F",
     "Gly": "G", "His": "H", "Ile": "I", "Leu": "L", "Lys": "K", 
     "Met": "M", "Asn": "N", "Pro": "P", "Gln": "Q", "Arg": "R",
     "Ser": "S", "Thr": "T", "Val": "V", "Trp": "W", "Tyr": "Y",
-    "*": "Ter"
+    "Ter": "*"
 }
 AA1_TO_3 = {
     "A": "Ala", "C": "Cys", "D": "Asp", "E": "Glu", "F": "Phe",

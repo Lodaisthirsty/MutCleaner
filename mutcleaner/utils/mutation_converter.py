@@ -1,4 +1,4 @@
-# tidymut/utils/mutation_converter.py
+# mutcleaner/utils/mutation_converter.py
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

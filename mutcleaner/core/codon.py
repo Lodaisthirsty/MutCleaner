@@ -1,4 +1,4 @@
-# tidymut/core/codon_table.py
+# mutcleaner/core/codon_table.py
 from __future__ import annotations
 
 

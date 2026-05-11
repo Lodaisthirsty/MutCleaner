@@ -1,4 +1,4 @@
-# tidymut/core/pipeline.py
+# mutcleaner/core/pipeline.py
 from __future__ import annotations
 
 from typing import (

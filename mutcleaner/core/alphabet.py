@@ -1,4 +1,4 @@
-# tidymut/core/alphabet.py
+# mutcleaner/core/alphabet.py
 from __future__ import annotations
 
 from abc import ABC
@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING
 
 from .constants import (
     STANDARD_DNA_BASES,
-    AMBIGUOUSE_DNA_BASES,
+    AMBIGUOUS_DNA_BASES,
     STANDARD_RNA_BASES,
-    AMBIGUOUSE_RNA_BASES,
+    AMBIGUOUS_RNA_BASES,
     STANDARD_AMINO_ACIDS,
-    AMBIGUOUSE_AMINO_ACIDS,
+    AMBIGUOUS_AMINO_ACIDS,
     AA1_TO_3,
     AA3_TO_1,
 )
@@ -65,7 +65,7 @@ class DNAAlphabet(BaseAlphabet):
         standard = STANDARD_DNA_BASES
         if include_ambiguous:
             # IUPAC ambiguous nucleotide codes
-            ambiguous = AMBIGUOUSE_DNA_BASES
+            ambiguous = AMBIGUOUS_DNA_BASES
             letters = standard | ambiguous
         else:
             letters = standard
@@ -80,7 +80,7 @@ class RNAAlphabet(BaseAlphabet):
     def __init__(self, include_ambiguous: bool = False):
         standard = STANDARD_RNA_BASES
         if include_ambiguous:
-            ambiguous = AMBIGUOUSE_RNA_BASES
+            ambiguous = AMBIGUOUS_RNA_BASES
             letters = standard | ambiguous
         else:
             letters = standard
@@ -103,7 +103,7 @@ class ProteinAlphabet(BaseAlphabet):
 
         if include_ambiguous:
             # Ambiguous amino acids
-            letters.update(AMBIGUOUSE_AMINO_ACIDS)
+            letters.update(AMBIGUOUS_AMINO_ACIDS)
 
         super().__init__(letters, "Protein")
         self.include_stop = include_stop
