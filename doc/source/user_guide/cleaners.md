@@ -2,24 +2,21 @@
 
 ## Overview
 
-This guide provides usage examples for data cleaning modules organized by database:
+This guide provides usage examples for data cleaning modules organized by dataset source:
 
-- [**HumanDomainome**](#human-domainome-database): Site-saturation mutagenesis of 500 human protein domains
-    - [**Supplementary Table 2**](#supplementarytable2-cleaner): Fitness scores and errors.
-    - [**Supplementary Table 4**](#supplementarytable4-cleaner): Homolog-averaged ∆∆G predictions across families mapped to homologous domains proteome-wide.
-- [**ProteinGym**](#protein-gym-database): ProteinGym: Large-Scale Benchmarks for Protein Design and Fitness Prediction
-- [**cDNAProteolysis**](#cdna-proteolysis-database): Mega-scale experimental analysis of protein folding stability in biology and design
-- [**ddG-dTm Datasets**](#ddg-dtm-datasets): A collection of datasets providing single- and multiple-mutant measurements, labeled by thermodynamic parameters (ΔΔG, ΔTm)
-- [**ArchStabMS1E10 Datasets**](#archstabms1e10-datasets): High-order multi-mutant libraries (“1e10”) measuring protein stability for GRB2-SH3 and SRC.
-- [**Antitoxin ParD3 Datasets**](#antitoxin-pard3): The antitoxin ParD3 3-position library is a combinatorially exhaustive dataset of 8,000 variants demonstrating that simple, independent per-residue mutation preferences are sufficient to almost perfectly predict combinatorial protein fitness.
-- [**TrpB Datasets**](#trpb-datasets): a combinatorially complete sequence-fitness landscape comprising 160,000 variants across four active-site residues of the enzyme tryptophan synthase, capturing significant epistatic interactions to serve as a benchmark for model-guided enzyme engineering.
-- [**Human Myoglobin Datasets**](#human-myoglobin-datasets): a deep mutational scanning library detailing the expression fitness scores for near-comprehensive single-codon and small-fraction double-codon mutations in yeast surface-displayed human myoglobin, which was used to train machine learning models for predicting epistatic effects and discovering stability-enhancing variants.
-- [**CTXM Datasets**](#ctxm-database): a comprehensive deep mutational scanning library of 49,096 pairwise double mutations across 17 active site residues of the CTX-M-14 $\beta$-lactamase enzyme, constructed to systematically map the epistatic interaction network driving antibiotic resistance.
-    - [**CTXM ampicillin**]: A subset of the CTX-M library quantifying the functional fitness and epistatic interactions of the enzyme variants under ampicillin selection, revealing a broader mutational tolerance and distinct compensatory pathways.
-    - [**CTXM cefotaxime**]: A subset of the CTX-M library quantifying the functional fitness and epistatic interactions of the enzyme variants under cefotaxime selection, characterized by highly stringent sequence requirements and substrate-specific epistasis.
-- [**RBD ACE2 Database**](#rbd-ace2-database): SARS-CoV-2 RBD sequences with ACE2 binding affinity scores, labeled by `log10Ka` where higher values indicate stronger ACE2 binding affinity.
-- [**RBD Antibody Database**](#rbd-antibody-database): SARS-CoV-2 RBD antibody escape data with `score` computed as the negative logarithm of escape. Higher scores indicate weaker escape, reflecting better binding capacity.
+- [**Human Domainome Dataset**](#human-domainome-dataset): Site-saturation mutagenesis of 500 human protein domains
+- [**ProteinGym**](#proteingym): Large-Scale Benchmarks for Protein Design and Fitness Prediction
+- [**cDNA Proteolysis Dataset**](#cdna-proteolysis-dataset): Mega-scale experimental analysis of protein folding stability in biology and design
+- [**ddG-dTm dataset**](#ddg-dtm-dataset): A collection of datasets providing single- and multiple-mutant measurements, labeled by thermodynamic parameters (ΔΔG, ΔTm)
+- [**ArchStabMS1E10 Epistasis Dataset**](#archstabms1e10-epistasis-dataset): High-order multi-mutant libraries (“1e10”) measuring protein stability for GRB2-SH3 and SRC.
+- [**Antitoxin ParD3 Epistasis Dataset**](#antitoxin-pard3-epistasis-dataset): The antitoxin ParD3 3-position library is a combinatorially exhaustive dataset of 8,000 variants demonstrating that simple, independent per-residue mutation preferences are sufficient to almost perfectly predict combinatorial protein fitness.
+- [**TrpB Epistasis Dataset**](#trpb-epistasis-dataset): a combinatorially complete sequence-fitness landscape comprising 160,000 variants across four active-site residues of the enzyme tryptophan synthase, capturing significant epistatic interactions to serve as a benchmark for model-guided enzyme engineering.
+- [**Human Myoglobin Epistasis Dataset**](#human-myoglobin-epistasis-dataset): A deep mutational scanning library detailing the expression fitness scores for near-comprehensive single-codon and small-fraction double-codon mutations in yeast surface-displayed human myoglobin, which was used to train machine learning models for predicting epistatic effects and discovering stability-enhancing variants.
+- [**CTXM Epistasis Dataset**](#ctxm-epistasis-dataset): A large-scale pairwise deep mutational scanning dataset of the CTX-M-14 $\beta$-lactamase active site, covering 49,096 double mutants across 17 active-site residues. Fitness measurements were obtained from functional selection under ampicillin and cefotaxime, providing substrate-dependent fitness landscapes for studying epistasis, compensatory mutations, and antibiotic resistance prediction.
+- [**RBD-ACE2 Dataset**](#rbd-ace2-dataset): SARS-CoV-2 RBD sequences with ACE2 binding affinity scores, labeled by `log10Ka` where higher values indicate stronger ACE2 binding affinity.
+- [**RBD-Antibody Dataset**](#rbd-antibody-dataset): SARS-CoV-2 RBD antibody escape data with `score` computed as the negative logarithm of escape. Higher scores indicate weaker escape, reflecting better binding capacity.
 
+---
 
 ## Prerequisites
 
@@ -29,21 +26,20 @@ pip install mutcleaner
 
 ---
 
-## Human Domainome Database
+## Human Domainome Dataset
 
 ### File Preparation
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_human_domainome_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_human_domainome_source_file` for details):
 ```python
 from mutcleaner import download_human_domainome_source_file
 filepaths = download_human_domainome_source_file("path/to/target/folder")
 ```
 
-Alternatively, you can download it from [Nature](https://www.nature.com/articles/s41586-024-08370-4) or [Hugging Face](https://huggingface.co/datasets/xulab-research/mutcleaner/tree/main/human_domainome) (See `SupplementaryTable2.txt` or `SupplementaryTable4.txt`)
+Alternatively, you can download it from [Nature](https://www.nature.com/articles/s41586-024-08370-4) or [Hugging Face](https://huggingface.co/datasets/xulab-research/mutcleaner/tree/main/human_domainome) (See `SupplementaryTable2.txt`)
 
-The Hugging Face dataset already includes the reference FASTA. If you are not using that source, you’ll need to provide the FASTA yourself (i.e., the reviewed Human (9606) proteome from  [UNIPROT](
-https://rest.uniprot.org/uniprotkb/stream?download=true&format=fasta&query=%28*%29+AND+%28model_organism%3A9606%29+AND+%28reviewed%3Atrue%29)).
+The Hugging Face dataset already includes the reference FASTA. If you are not using that source, you’ll need to provide the FASTA yourself (i.e., the reviewed Human (9606) proteome from  [UNIPROT](https://rest.uniprot.org/uniprotkb/stream?download=true&format=fasta&query=%28*%29+AND+%28model_organism%3A9606%29+AND+%28reviewed%3Atrue%29)).
 
-### SupplementaryTable2 Cleaner
+### Basic Usage
 
 **Cleaning Pipeline**
 
@@ -62,36 +58,12 @@ hd_cleaning_pipeline, hd_dataset = clean_human_domainome_sup2_dataset(hd_cleanin
 
 **Advanced Settings**
 
-See {py:func}`mutcleaner.cleaners.HumanDomainomeSup2CleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.HumanDomainomeSup2CleanerConfig` for details.
 
-### SupplementaryTable4 Cleaner
-
-**Cleaning Pipeline**
-
-```python
-from mutcleaner.cleaners import (
-    create_human_domainome_sup4_cleaner, 
-    clean_human_domainome_sup4_dataset
-)
-
-# File settings
-dataset_filepath = "path/to/dataset/file"
-reference_fasta_filepath = "path/to/fasta"
-# Clean data
-hd_cleaning_pipeline = create_human_domainome_sup4_cleaner(dataset_filepath, reference_fasta_filepath)
-hd_cleaning_pipeline, hd_dataset = clean_human_domainome_sup4_dataset(hd_cleaning_pipeline)
-```
-
-**Advanced Settings**
-
-See {py:func}`mutcleaner.cleaners.HumanDomainomeSup4CleanerConfig` for details.
-
----
-
-## Protein Gym Database
+## ProteinGym
 
 ### File Preparation
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_protein_gym_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_protein_gym_source_file` for details):
 ```python
 from mutcleaner import download_protein_gym_source_file
 filepaths = download_protein_gym_source_file("path/to/target/folder")
@@ -118,12 +90,12 @@ pg_cleaning_pipeline, pg_dataset = clean_protein_gym_dataset(pg_cleaning_pipelin
 
 **Advanced Settings**
 
-See {py:func}`mutcleaner.cleaners.ProteinGymCleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.ProteinGymCleanerConfig` for details.
 
-## cDNA Proteolysis Database
+## cDNA Proteolysis Dataset
 
 ### File Preparation
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_cdna_proteolysis_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_cdna_proteolysis_source_file` for details):
 ```python
 from mutcleaner import download_cdna_proteolysis_source_file
 filepaths = download_cdna_proteolysis_source_file("path/to/target/folder")
@@ -174,11 +146,11 @@ cdnap_cleaning_pipeline = create_cdna_proteolysis_cleaner(dataset_filepath, cdna
 cdnap_cleaning_pipeline, cdnap_dataset = clean_cdna_proteolysis_dataset(cdnap_cleaning_pipeline)
 ```
 
-## ddG-dTm Datasets
+## ddG-dTm Dataset
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_ddg_dtm_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_ddg_dtm_source_file` for details):
 ```python
 from mutcleaner import download_ddg_dtm_source_file
 
@@ -209,13 +181,13 @@ ddgdtm_cleaning_pipeline, ddgdtm_dataset = clean_ddg_dtm_dataset(ddgdtm_cleaning
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.DdgDtmCleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.DdgDtmCleanerConfig` for details.
 
-## ArchStabMS1E10 Datasets
+## ArchStabMS1E10 Epistasis Dataset
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_archstabms1e10_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_archstabms1e10_source_file` for details):
 ```python
 from mutcleaner import download_archstabms1e10_source_file
 filepaths = download_archstabms1e10_source_file("path/to/target/folder")
@@ -234,18 +206,20 @@ dataset_filepath = "path/to/dataset/file"
 
 # Clean data
 archstabms_cleaning_pipeline = create_archstabms_1e10_cleaner(dataset_filepath)
-archstabms_cleaning_pipeline, archstabms_dataset = clean_archstabms_1e10_dataset(ddgdtm_cleaning_pipeline)
+archstabms_cleaning_pipeline, archstabms_dataset = clean_archstabms_1e10_dataset(
+    archstabms_cleaning_pipeline
+)
 ```
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.ArchStabMS1E10CleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.ArchStabMS1E10CleanerConfig` for details.
 
-## Antitoxin ParD3
+## Antitoxin ParD3 Epistasis Dataset
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_antitoxin_pard3_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_antitoxin_pard3_source_file` for details):
 ```python
 from mutcleaner import download_antitoxin_pard3_source_file
 filepaths = download_antitoxin_pard3_source_file("path/to/target/folder")
@@ -264,18 +238,20 @@ dataset_filepath = "path/to/dataset/file"
 
 # Clean data
 antitoxin_pard3_cleaning_pipeline = create_antitoxin_pard3_cleaner(dataset_filepath)
-antitoxin_pard3_cleaning_pipeline, antitoxin_pard3_dataset = clean_antitoxin_pard3_dataset(ddgdtm_cleaning_pipeline)
+antitoxin_pard3_cleaning_pipeline, antitoxin_pard3_dataset = clean_antitoxin_pard3_dataset(
+    antitoxin_pard3_cleaning_pipeline
+)
 ```
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.AntitoxinParD3CleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.AntitoxinParD3CleanerConfig` for details.
 
-## TrpB Datasets
+## TrpB Epistasis Dataset
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_trpb_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_trpb_source_file` for details):
 ```python
 from mutcleaner import download_trpb_source_file
 filepaths = download_trpb_source_file("path/to/target/folder")
@@ -293,20 +269,20 @@ from mutcleaner.cleaners import (
 dataset_filepath = "path/to/dataset/file"
 
 # Clean data
-trpB_cleaning_pipeline = create_trpb_cleaner(dataset_filepath)
-trpB_cleaning_pipeline, trpB_dataset = clean_trpb_dataset(trpB_cleaning_pipeline)
+trpb_cleaning_pipeline = create_trpb_cleaner(dataset_filepath)
+trpb_cleaning_pipeline, trpb_dataset = clean_trpb_dataset(trpb_cleaning_pipeline)
 ```
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.TrpBCleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.TrpBCleanerConfig` for details.
 
-## Human Myoglobin Datasets
+## Human Myoglobin Epistasis Dataset
 
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_human_myoglobin_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_human_myoglobin_source_file` for details):
 ```python
 from mutcleaner import download_human_myoglobin_source_file
 filepaths = download_human_myoglobin_source_file("path/to/target/folder")
@@ -316,8 +292,8 @@ filepaths = download_human_myoglobin_source_file("path/to/target/folder")
 
 ```python
 from mutcleaner.cleaners import (
-    create_trpb_cleaner,
-    clean_trpb_dataset
+    create_human_myoglobin_cleaner,
+    clean_human_myoglobin_dataset,
 )
 
 # File settings
@@ -325,19 +301,21 @@ dataset_filepath = "path/to/dataset/file"
 
 # Clean data
 human_myoglobin_cleaning_pipeline = create_human_myoglobin_cleaner(dataset_filepath)
-human_myoglobin_cleaning_pipeline, human_myoglobin_dataset = clean_trpb_dataset(human_myoglobin_cleaning_pipeline)
+human_myoglobin_cleaning_pipeline, human_myoglobin_dataset = clean_human_myoglobin_dataset(
+    human_myoglobin_cleaning_pipeline
+)
 ```
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.HumanMyoglobinCleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.HumanMyoglobinCleanerConfig` for details.
 
-## CTXM DataBase
+## CTXM Epistasis Dataset
 
 
 ### File Preparation
 
-You can download the source file directy by running (see {py:func}`mutcleaner.utils.download_ctxm_source_file` for details):
+You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_ctxm_source_file` for details):
 ```python
 from mutcleaner import download_ctxm_source_file
 filepaths = download_ctxm_source_file("path/to/target/folder")
@@ -356,15 +334,15 @@ dataset_filepath = "path/to/dataset/file"
 
 # Clean data
 ctxm_cleaning_pipeline = create_ctxm_cleaner(dataset_filepath)
-ctxm_cleaning_pipeline, ctxm_dataset = clean_trpb_dataset(ctxm_cleaning_pipeline)
+ctxm_cleaning_pipeline, ctxm_dataset = clean_ctxm_dataset(ctxm_cleaning_pipeline)
 ```
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.CTXMCleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.CTXMCleanerConfig` for details.
 
 
-## RBD ACE2 Database
+## RBD-ACE2 Dataset
 
 ### File Preparation
 
@@ -413,9 +391,9 @@ rbd_ace2_cleaning_pipeline, rbd_ace2_dataset = clean_rbd_ace2_dataset(
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.RBDACE2CleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.RBDACE2CleanerConfig` for details.
 
-## RBD Antibody Database
+## RBD-Antibody Dataset
 
 ### File Preparation
 
@@ -465,4 +443,4 @@ rbd_antibody_cleaning_pipeline, rbd_antibody_dataset = clean_rbd_antibody_datase
 
 ### Advanced Settings
 
-See {py:func}`mutcleaner.cleaners.RBDAntibodyCleanerConfig` for details.
+See {py:class}`mutcleaner.cleaners.RBDAntibodyCleanerConfig` for details.
