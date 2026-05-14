@@ -83,11 +83,7 @@ class BaseMutation(ABC):
         """Check if two mutations are equal"""
         if not isinstance(other, self.__class__):
             return False
-        return (
-            self.position == other.position
-            and str(self) == str(other)
-            and self.type == other.type
-        )
+        return self.position == other.position and str(self) == str(other) and self.type == other.type
 
     def __hash__(self) -> int:
         """Enable use in sets and as dict keys"""
@@ -130,12 +126,7 @@ class AminoAcidMutation(BaseMutation):
 
     def _is_valid(self) -> bool:
         """Check if mutation uses valid amino acid codes"""
-        return (
-            self.wild_amino_acid in self.alphabet
-            and self.mutant_amino_acid in self.alphabet
-            and isinstance(self.position, int)
-            and self.position >= 0
-        )
+        return self.wild_amino_acid in self.alphabet and self.mutant_amino_acid in self.alphabet and isinstance(self.position, int) and self.position >= 0
 
     def is_synonymous(self) -> bool:
         """Check if mutation is synonymous (no change)"""
@@ -191,10 +182,7 @@ class AminoAcidMutation(BaseMutation):
         match = re.match(one_letter_pattern, mutation_str)
 
         if not match:
-            raise ValueError(
-                f"Invalid mutation format: {mutation_str}. "
-                f"Expected formats: 'A123V' or 'Ala123Val'"
-            )
+            raise ValueError(f"Invalid mutation format: {mutation_str}. " f"Expected formats: 'A123V' or 'Ala123Val'")
 
         wild_amino_acid, position, mutant_amino_acid = match.groups()
         if is_zero_based:
@@ -220,25 +208,17 @@ class CodonMutation(BaseMutation):
         self.mutant_codon = mutant_type.upper()
 
         # Auto-detect sequence type based on presence of T/U
-        self.seq_type: Literal["DNA", "RNA", "Both"] = self._detect_seq_type(
-            self.wild_codon, self.mutant_codon
-        )
+        self.seq_type: Literal["DNA", "RNA", "Both"] = self._detect_seq_type(self.wild_codon, self.mutant_codon)
 
         # Use appropriate alphabet based on detected sequence type
-        self.alphabet = (
-            alphabet
-            if alphabet is not None
-            else (RNAAlphabet() if self.seq_type == "RNA" else DNAAlphabet())
-        )
+        self.alphabet = alphabet if alphabet is not None else (RNAAlphabet() if self.seq_type == "RNA" else DNAAlphabet())
         print("Alphabet:", self.alphabet, "seq_type:", self.seq_type)
 
         if not self._is_valid():
             raise ValueError(f"Invalid codon mutation: {self}")
 
     @staticmethod
-    def _detect_seq_type(
-        wild_codon: str, mutant_codon: str
-    ) -> Literal["DNA", "RNA", "Both"]:
+    def _detect_seq_type(wild_codon: str, mutant_codon: str) -> Literal["DNA", "RNA", "Both"]:
         """Auto-detect sequence type based on T/U presence"""
         combined_sequence = (wild_codon + mutant_codon).upper()
 
@@ -264,21 +244,12 @@ class CodonMutation(BaseMutation):
 
     def _is_valid(self) -> bool:
         """Check if codons are valid"""
-        return (
-            len(self.wild_codon) == 3
-            and len(self.mutant_codon) == 3
-            and self.alphabet.is_valid_sequence(self.wild_codon)
-            and self.alphabet.is_valid_sequence(self.mutant_codon)
-            and isinstance(self.position, int)
-            and self.position >= 0
-        )
+        return len(self.wild_codon) == 3 and len(self.mutant_codon) == 3 and self.alphabet.is_valid_sequence(self.wild_codon) and self.alphabet.is_valid_sequence(self.mutant_codon) and isinstance(self.position, int) and self.position >= 0
 
     def get_mutation_category(self) -> str:
         return f"codon_{self.seq_type.lower()}"
 
-    def to_amino_acid_mutation(
-        self, codon_table: Optional[CodonTable] = None
-    ) -> AminoAcidMutation:
+    def to_amino_acid_mutation(self, codon_table: Optional[CodonTable] = None) -> AminoAcidMutation:
         """Convert codon mutation to amino acid mutation"""
         if codon_table is None:
             # Use appropriate codon table based on detected sequence type
@@ -291,9 +262,7 @@ class CodonMutation(BaseMutation):
         wild_aa = codon_table.translate_codon(self.wild_codon)
         mutant_aa = codon_table.translate_codon(self.mutant_codon)
 
-        return AminoAcidMutation(
-            wild_aa, self.position, mutant_aa, metadata=self.metadata.copy()
-        )
+        return AminoAcidMutation(wild_aa, self.position, mutant_aa, metadata=self.metadata.copy())
 
     @classmethod
     def from_string(
@@ -311,15 +280,7 @@ class CodonMutation(BaseMutation):
 
         if match:
             wild_codon, position, mutant_codon = match.groups()
-            alphabet = (
-                alphabet
-                if alphabet is not None
-                else (
-                    RNAAlphabet()
-                    if cls._detect_seq_type(wild_codon, mutant_codon) == "RNA"
-                    else DNAAlphabet()
-                )
-            )
+            alphabet = alphabet if alphabet is not None else (RNAAlphabet() if cls._detect_seq_type(wild_codon, mutant_codon) == "RNA" else DNAAlphabet())
             if is_zero_based:
                 return cls(wild_codon, int(position), mutant_codon, alphabet)
             else:
@@ -380,25 +341,16 @@ class MutationSet(Generic[MutationType]):
             return self.mutations[0].type
         return "unknown"
 
-    def _validate_mutation_types(
-        self, mutations: Sequence[MutationType], expected_type: Type[MutationType]
-    ) -> None:
+    def _validate_mutation_types(self, mutations: Sequence[MutationType], expected_type: Type[MutationType]) -> None:
         """Validate that all mutations are of the expected class type"""
         if not issubclass(expected_type, BaseMutation):
-            raise TypeError(
-                f"Expected mutations to be of type {expected_type.__name__}"
-            )
+            raise TypeError(f"Expected mutations to be of type {expected_type.__name__}")
 
         invalid_mutations = [m for m in mutations if not isinstance(m, expected_type)]
         if invalid_mutations:
-            raise ValueError(
-                f"All mutations must be of type {expected_type.__name__}. "
-                f"Found {len(invalid_mutations)} mutations of different types."
-            )
+            raise ValueError(f"All mutations must be of type {expected_type.__name__}. " f"Found {len(invalid_mutations)} mutations of different types.")
 
-    def _validate_mutation_type_consistency(
-        self, mutations: Sequence[MutationType]
-    ) -> None:
+    def _validate_mutation_type_consistency(self, mutations: Sequence[MutationType]) -> None:
         """Validate that all mutations have the same type property"""
         if not mutations:
             return
@@ -409,10 +361,7 @@ class MutationSet(Generic[MutationType]):
                 return
 
             else:
-                raise ValueError(
-                    f"All mutations must have the same type property. "
-                    f"Found mixed types: {types_found}"
-                )
+                raise ValueError(f"All mutations must have the same type property. " f"Found mixed types: {types_found}")
 
     def _validate_unique_positions(self, mutations: Sequence[MutationType]) -> None:
         """Validate that mutations have unique positions"""
@@ -425,17 +374,11 @@ class MutationSet(Generic[MutationType]):
         """Add a mutation to this set"""
         # Validate mutation class type
         if not isinstance(mutation, self.mutation_type):
-            raise ValueError(
-                f"Mutation must be of type {self.mutation_type.__name__}, "
-                f"got {type(mutation).__name__}"
-            )
+            raise ValueError(f"Mutation must be of type {self.mutation_type.__name__}, " f"got {type(mutation).__name__}")
 
         # Validate mutation type property consistency
         if self.mutations and mutation.type != self.mutation_subtype:
-            raise ValueError(
-                f"Mutation type property must match existing mutations. "
-                f"Expected '{self.mutation_subtype}', got '{mutation.type}'"
-            )
+            raise ValueError(f"Mutation type property must match existing mutations. " f"Expected '{self.mutation_subtype}', got '{mutation.type}'")
 
         # Check for position conflict
         if mutation.position in self.get_positions():
@@ -512,6 +455,7 @@ class MutationSet(Generic[MutationType]):
         sep: Optional[str] = None,
         is_zero_based: bool = False,
         reject_redundant: bool = True,
+        reject_nonsense: bool = True,
         mutation_type: Optional[Type[MutationType]] = None,
         alphabet: Optional[BaseAlphabet] = None,
         name: Optional[str] = None,
@@ -528,6 +472,10 @@ class MutationSet(Generic[MutationType]):
             Separator to use. If None, will try to guess
         is_zero_based : bool, default=False
             Whether origin mutation positions are zero-based
+        reject_redundant : bool, default=True
+            Whether to reject synonymous/no-op mutations
+        reject_nonsense : bool, default=True
+            Whether to reject nonsense mutations.
         mutation_type : Type[MutationType], default=None
             The type of mutations to create. If None, will infer from first mutation
         alphabet : Optional[BaseAlphabet], default=None
@@ -580,27 +528,19 @@ class MutationSet(Generic[MutationType]):
             try:
                 if mutation_type is None:
                     # Try to infer mutation type from the first mutation string
-                    mutation = cls._infer_and_create_mutation(
-                        mutation_str, is_zero_based, alphabet
-                    )
+                    mutation = cls._infer_and_create_mutation(mutation_str, is_zero_based, alphabet)
                     mutation_type = type(mutation)
                 else:
                     # Use specified mutation type
                     if hasattr(mutation_type, "from_string"):
-                        mutation = mutation_type.from_string(
-                            mutation_str, is_zero_based, alphabet
-                        )
+                        mutation = mutation_type.from_string(mutation_str, is_zero_based, alphabet)
                     else:
-                        raise NotImplementedError(
-                            f"Mutation type {mutation_type.__name__} does not have from_string method"
-                        )
+                        raise NotImplementedError(f"Mutation type {mutation_type.__name__} does not have from_string method")
 
                 mutations.append(mutation)
 
             except Exception as e:
-                errors.append(
-                    f"Error parsing mutation '{mutation_str}' at position {i}: {str(e)}"
-                )
+                errors.append(f"Error parsing mutation '{mutation_str}' at position {i}: {str(e)}")
 
         if not mutations:
             error_msg = "No valid mutations could be parsed"
@@ -613,12 +553,13 @@ class MutationSet(Generic[MutationType]):
             raise ValueError(f"Some mutations could not be parsed: {'; '.join(errors)}")
 
         if reject_redundant:
-            redundant = [
-                str(m) for m in mutations if hasattr(m, "is_synonymous") and callable(getattr(m,"is_synonymous")) and m.is_synonymous()
-            ]
+            redundant = [str(m) for m in mutations if hasattr(m, "is_synonymous") and callable(getattr(m, "is_synonymous")) and m.is_synonymous()]
             if redundant:
                 raise ValueError(f"Redundant/no-op mutations detected:{', '.join(redundant)}")
-
+        if reject_nonsense:
+            nonsense = [str(m) for m in mutations if hasattr(m, "is_nonsense") and callable(getattr(m, "is_nonsense")) and m.is_nonsense()]
+            if nonsense:
+                raise ValueError(f"Nonsense/stop-gain mutations detected: {', '.join(nonsense)}")
         # Return appropriate mutation set type based on detected mutation type
         if mutation_type == AminoAcidMutation:
             return AminoAcidMutationSet(
@@ -683,10 +624,7 @@ class MutationSet(Generic[MutationType]):
                 continue
 
         # none of the mutation types could parse the string
-        raise ValueError(
-            f"Could not parse mutation string '{mutation_str}' with any known mutation type. "
-            f"Last error: {last_error}"
-        )
+        raise ValueError(f"Could not parse mutation string '{mutation_str}' with any known mutation type. " f"Last error: {last_error}")
 
     @classmethod
     def _create_mutation(
@@ -710,9 +648,7 @@ class MutationSet(Generic[MutationType]):
         separator_counts = {sep: string.count(sep) for sep in candidate_separators}
 
         # Filter out separators that don't appear
-        valid_separators = {
-            sep: count for sep, count in separator_counts.items() if count > 0
-        }
+        valid_separators = {sep: count for sep, count in separator_counts.items() if count > 0}
 
         if not valid_separators:
             return None
@@ -784,9 +720,7 @@ class CodonMutationSet(MutationSet[CodonMutation]):
             return self.mutations[0].seq_type
         return "Both"
 
-    def to_amino_acid_mutation_set(
-        self, codon_table: Optional[CodonTable] = None
-    ) -> AminoAcidMutationSet:
+    def to_amino_acid_mutation_set(self, codon_table: Optional[CodonTable] = None) -> AminoAcidMutationSet:
         """Convert all codon mutations to amino acid mutations"""
         if codon_table is None:
             # Use appropriate codon table based on detected sequence type
@@ -796,9 +730,7 @@ class CodonMutationSet(MutationSet[CodonMutation]):
             else:
                 codon_table = CodonTable.get_standard_table(self.seq_type)
 
-        aa_mutations = [
-            mutation.to_amino_acid_mutation(codon_table) for mutation in self.mutations
-        ]
+        aa_mutations = [mutation.to_amino_acid_mutation(codon_table) for mutation in self.mutations]
 
         return AminoAcidMutationSet(
             aa_mutations,

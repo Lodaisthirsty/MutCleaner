@@ -1,4 +1,4 @@
-# tidymut/cleaners/protein_gym_cleaner_pipeline.py
+# mutcleaner/cleaners/proteingym_dms_substitutions_cleaner.py
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -15,7 +15,7 @@ from .basic_cleaners import (
     infer_wildtype_sequences,
     convert_to_mutation_dataset_format,
 )
-from .protein_gym_custom_cleaners import read_protein_gym_data
+from .proteingym_dms_substitutions_custom_cleaners import read_proteingym_dms_substitutions_data
 from ..core.dataset import MutationDataset
 from ..core.pipeline import Pipeline, create_pipeline
 
@@ -24,8 +24,8 @@ if TYPE_CHECKING:
 
 __all__ = [
     "ProteinGymCleanerConfig",
-    "create_protein_gym_cleaner",
-    "clean_protein_gym_dataset",
+    "create_proteingym_dms_substitutions_cleaner",
+    "clean_proteingym_dms_substitutions_dataset",
 ]
 
 
@@ -43,12 +43,12 @@ class ProteinGymCleanerConfig(BaseCleanerConfig):
     Configuration class for ProteinGym dataset cleaner.
     Inherits from BaseCleanerConfig and adds ProteinGym-specific configuration options.
 
-    Simply run `tidymut.download_protein_gym_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_protein_gym_source_file()` to download the dataset.
 
     Alternatively, the raw ProteinGym file can be obtained from:
 
     - ProteinGym: https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/DMS_ProteinGym_substitutions.zip
-    - Hugging Face: https://huggingface.co/datasets/xulab-research/TidyMut/resolve/main/ProteinGym_DMS_substitutions/DMS_ProteinGym_substitutions.zip?download=true
+    - Hugging Face: https://huggingface.co/datasets/xulab-research/MutCleaner/resolve/main/ProteinGym_DMS_substitutions/DMS_ProteinGym_substitutions.zip?download=true
 
     Attributes
     ----------
@@ -104,7 +104,7 @@ class ProteinGymCleanerConfig(BaseCleanerConfig):
     primary_label_column: str = "DMS_score"
 
     # Override default pipeline name
-    pipeline_name: str = "protein_gym_cleaner"
+    pipeline_name: str = "ProteinGym Pipeline"
 
     def validate(self) -> None:
         """Validate ProteinGym-specific configuration parameters
@@ -142,7 +142,7 @@ class ProteinGymCleanerConfig(BaseCleanerConfig):
             raise ValueError(f"Missing required column mappings: {missing}")
 
 
-def create_protein_gym_cleaner(
+def create_proteingym_dms_substitutions_cleaner(
     data_path: Union[str, Path],
     config: Optional[Union[ProteinGymCleanerConfig, Dict[str, Any], str, Path]] = None,
 ) -> Pipeline:
@@ -240,7 +240,7 @@ def create_protein_gym_cleaner(
         # Add cleaning steps using basic_cleaners functions
         pipeline = (
             pipeline.delayed_then(
-                read_protein_gym_data,
+                read_proteingym_dms_substitutions_data,
             )
             .delayed_then(
                 extract_and_rename_columns,
@@ -293,7 +293,7 @@ def create_protein_gym_cleaner(
         raise RuntimeError(f"Error in creating ProteinGym cleaning pipeline: {str(e)}")
 
 
-def clean_protein_gym_dataset(pipeline: Pipeline) -> Tuple[Pipeline, MutationDataset]:
+def clean_proteingym_dms_substitutions_dataset(pipeline: Pipeline) -> Tuple[Pipeline, MutationDataset]:
     """Clean ProteinGym dataset using configurable pipeline
 
     Parameters
@@ -312,17 +312,17 @@ def clean_protein_gym_dataset(pipeline: Pipeline) -> Tuple[Pipeline, MutationDat
         pipeline.execute()
 
         # Extract results
-        protein_gym_dataset_df, protein_gym_ref_seq = pipeline.data
-        protein_gym_dataset = MutationDataset.from_dataframe(
-            protein_gym_dataset_df, protein_gym_ref_seq
+        proteingym_dms_substitutions_dataset_df, proteingym_dms_substitutions_ref_seq = pipeline.data
+        proteingym_dms_substitutions_dataset = MutationDataset.from_dataframe(
+            proteingym_dms_substitutions_dataset_df, proteingym_dms_substitutions_ref_seq
         )
 
         logger.info(
             f"Successfully cleaned ProteinGym dataset: "
-            f"{len(protein_gym_dataset_df)} mutations from {len(protein_gym_ref_seq)} proteins"
+            f"{len(proteingym_dms_substitutions_dataset_df)} mutations from {len(proteingym_dms_substitutions_ref_seq)} proteins"
         )
 
-        return pipeline, protein_gym_dataset
+        return pipeline, proteingym_dms_substitutions_dataset
 
     except Exception as e:
         logger.error(f"Error in running ProteinGym cleaning pipeline: {str(e)}")

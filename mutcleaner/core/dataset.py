@@ -6,7 +6,7 @@ import json
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
-from typing import cast, Any, Dict, TYPE_CHECKING
+from typing import Any, Dict, TYPE_CHECKING
 
 from .mutation import (
     MutationSet,
@@ -901,7 +901,7 @@ class MutationDataset:
     def save(
         self,
         filepath: str,
-        save_type: Optional[Literal["tidymut", "pickle", "dataframe"]] = "tidymut",
+        save_type: Optional[Literal["mutcleaner", "pickle", "dataframe"]] = "mutcleaner",
     ):
         """
         Save the dataset to files.
@@ -910,8 +910,8 @@ class MutationDataset:
         ----------
         filepath : str
             Base filepath (without extension)
-        save_type : Optional[Literal["tidymut", "pickle", "dataframe"]], default="tidymut"
-            Type of save format ("tidymut", "dataframe" or "pickle")
+        save_type : Optional[Literal["mutcleaner", "pickle", "dataframe"]], default="mutcleaner"
+            Type of save format ("mutcleaner", "dataframe" or "pickle")
 
         For save_type="dataframe":
             - Saves mutations as {filepath}.csv
@@ -968,17 +968,17 @@ class MutationDataset:
                 pickle.dump(self, f)
             tqdm.write(f"Dataset saved to: {pkl_path}")
 
-        elif save_type == "tidymut":
-            # Save as TidyMut format
+        elif save_type == "mutcleaner":
+            # Save as Mutcleaner format
             if base_path.suffix != "":
                 raise ValueError(
-                    f"Invalid TidyMut save format. Expected folder but got {base_path.suffix}."
+                    f"Invalid Mutcleaner save format. Expected folder but got {base_path.suffix}."
                 )
             self.save_by_reference(base_path)
 
         else:
             raise ValueError(
-                f"Unsupported save_type: {save_type}. Use 'tidymut', 'dataframe' or 'pickle'"
+                f"Unsupported save_type: {save_type}. Use 'mutcleaner', 'dataframe' or 'pickle'"
             )
 
     # ====== load ======
@@ -990,7 +990,7 @@ class MutationDataset:
         is_zero_based: bool = True,
     ) -> "MutationDataset":
         """
-        Load a dataset from tidymut reference-based format.
+        Load a dataset from mutcleaner reference-based format.
 
         Expected directory structure::
 
@@ -1018,7 +1018,6 @@ class MutationDataset:
         -------
         MutationDataset instance
         """
-        import json
 
         base_path = Path(base_dir)
         if not base_path.exists():
@@ -1040,7 +1039,7 @@ class MutationDataset:
         skipped_dirs = []
 
         # Process each reference directory
-        for ref_dir in tqdm(ref_dirs, desc="Loading dataset from tidymut format "):
+        for ref_dir in tqdm(ref_dirs, desc="Loading dataset from mutcleaner format "):
             # Required files
             data_path = ref_dir / "data.csv"
             fasta_path = ref_dir / "wt.fasta"
@@ -1159,7 +1158,7 @@ class MutationDataset:
         filepath : str
             Base filepath (with or without extension)
         load_type : Optional[str], default=None
-            Type of load format ("tidymut", "dataframe" or "pickle").
+            Type of load format ("mutcleaner", "dataframe" or "pickle").
             If None, auto-detect from file extension.
 
         Returns
@@ -1184,7 +1183,7 @@ class MutationDataset:
             elif base_path.suffix == ".pkl":
                 load_type = "pickle"
             elif base_path.suffix == "":
-                load_type = "tidymut"
+                load_type = "mutcleaner"
             else:
                 # Try dataframe format first
                 load_type = "dataframe"
@@ -1248,12 +1247,12 @@ class MutationDataset:
             tqdm.write(f"Dataset loaded from: {pkl_path}")
             return dataset
 
-        elif load_type == "tidymut":
+        elif load_type == "mutcleaner":
             return cls.load_by_reference(base_path)
 
         else:
             raise ValueError(
-                f"Unsupported load_type: {load_type}. Use 'dataframe' or 'pickle'"
+                f"Unsupported load_type: {load_type}. Use 'dataframe', 'pickle' or 'mutcleaner'"
             )
 
     @classmethod

@@ -460,9 +460,9 @@ class DNASequence(BaseSequence):
             Stop translation when a stop codon is encountered.
         require_mod3 : bool, default=True
             Whether the sequence must be a multiple of 3 in length.
-        start : Option[int], default=None
+        start : Optional[int], default=None
             Custom 0-based start position. Overrides `start_at_first_met`.
-        end : Option[int], default=None
+        end : Optional[int], default=None
             Custom 0-based end position. Overrides `stop_at_stop_codon`.
 
         Returns

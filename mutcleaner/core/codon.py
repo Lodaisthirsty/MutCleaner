@@ -80,5 +80,4 @@ class CodonTable:
         """get codon table by name"""
         return {
             "Standard": cls.get_standard_table(seq_type),
-            # TODO: add more tables here
         }[name]

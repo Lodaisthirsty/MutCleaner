@@ -1,4 +1,4 @@
-# tidymut/cleaners/protein_gym_pipeline_func.py
+# mutcleaner/cleaners/proteingym_dms_substitutions_custom_cleaners.py
 from __future__ import annotations
 
 import pandas as pd
@@ -10,7 +10,7 @@ from ..core.pipeline import multiout_step
 if TYPE_CHECKING:
     from typing import List, Tuple, Union
 
-__all__ = ["read_protein_gym_data"]
+__all__ = ["read_proteingym_dms_substitutions_data"]
 
 
 def __dir__() -> List[str]:
@@ -19,7 +19,7 @@ def __dir__() -> List[str]:
 
 # Protein Gym data reader function
 @multiout_step(main="success", failed="failed")
-def read_protein_gym_data(
+def read_proteingym_dms_substitutions_data(
     data_path: Union[str, Path],
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
@@ -49,10 +49,10 @@ def read_protein_gym_data(
     Examples
     --------
     Process directory of ProteinGym CSV files:
-    >>> success_df, failed_df = read_proteingym_batch_datasets("DMS_ProteinGym_substitutions/")
+    >>> success_df, failed_df = read_proteingym_dms_substitutions_data("DMS_ProteinGym_substitutions/")
 
     Process zip file:
-    >>> success_df, failed_df = read_proteingym_batch_datasets("DMS_ProteinGym_substitutions.zip")
+    >>> success_df, failed_df = read_proteingym_dms_substitutions_data("DMS_ProteinGym_substitutions.zip")
     """
     import shutil
     import tempfile
