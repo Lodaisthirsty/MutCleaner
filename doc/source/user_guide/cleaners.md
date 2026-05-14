@@ -5,7 +5,7 @@
 This guide provides usage examples for data cleaning modules organized by dataset source:
 
 - [**Human Domainome Dataset**](#human-domainome-dataset): Site-saturation mutagenesis of 500 human protein domains.
-- [**ProteinGym**](#proteingym): Large-Scale Benchmarks for Protein Design and Fitness Prediction.
+- [**ProteinGym DMS Substitutions Dataset**](#proteingym-dms-substitutions-dataset): Large-Scale Benchmarks for Protein Design and Fitness Prediction.
 - [**cDNA Proteolysis Dataset**](#cdna-proteolysis-dataset): Mega-scale experimental analysis of protein folding stability in biology and design.
 - [**ddG-dTm Dataset**](#ddg-dtm-dataset): A collection of datasets providing single- and multiple-mutant measurements, labeled by thermodynamic parameters (ΔΔG, ΔTm).
 - [**ArchStabMS1E10 Epistasis Dataset**](#archstabms1e10-epistasis-dataset): High-order multi-mutant libraries (“1e10”) measuring protein stability for GRB2-SH3 and SRC.
@@ -76,7 +76,7 @@ hd_cleaning_pipeline, hd_dataset = clean_human_domainome_sup2_dataset(hd_cleanin
 
 See {py:class}`mutcleaner.cleaners.HumanDomainomeSup2CleanerConfig` for details.
 
-### ProteinGym
+### ProteinGym DMS Substitutions Dataset
 
 #### File Preparation
 You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_protein_gym_source_file` for details):

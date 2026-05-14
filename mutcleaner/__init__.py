@@ -5,7 +5,7 @@ TidyMut: A Python package for cleaning protein mutation data
 
 __author__ = "Yuxiang Tang and Ziyu Shi"
 
-__version__ = "0.8.0"
+__version__ = "0.1.0"
 
 from .core import (
     # Alphabet

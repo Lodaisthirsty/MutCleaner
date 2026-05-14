@@ -18,7 +18,7 @@ from .basic_cleaners import (
     convert_to_mutation_dataset_format,
     average_labels_by_name,
 )
-from .protein_gym_custom_cleaners import read_protein_gym_data
+
 from ..core.dataset import MutationDataset
 from ..core.pipeline import Pipeline, create_pipeline
 
@@ -45,7 +45,7 @@ class TrpBCleanerConfig(BaseCleanerConfig):
     """
     Configuration class for TrpB dataset cleaner.
     Inherits from BaseCleanerConfig and adds TrpB-specific configuration options.
-    Simply run `tidymut.download_trpB_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_trpb_source_file()` to download the dataset.
 
     Alternatively, the raw TrpB file can be obtained from:
 
