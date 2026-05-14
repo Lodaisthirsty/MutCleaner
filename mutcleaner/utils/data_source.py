@@ -2,8 +2,8 @@
 
 DATASETS = {
     "cDNA Proteolysis Dataset": {
-        "name": "Mega-scale experimental analysis of protein folding stability in biology and design",
-        "official_url": "https://zenodo.org/records/7992926",
+        "paper_title": "Mega-scale experimental analysis of protein folding stability in biology and design",
+        "official_doi": "https://zenodo.org/records/7992926",
         "files": [
             "'Tsuboyama2023_Dataset2_Dataset3_20230416.csv' in 'Processed_K50_dG_datasets.zip'"
         ],
@@ -12,21 +12,20 @@ DATASETS = {
         ],
         "file_name": ["Tsuboyama2023_Dataset2_Dataset3_20230416.csv"],
     },
-    "ProteinGym": {
-        "name": "ProteinGym",
-        "official_url": "https://proteingym.org/download",
+    "ProteinGym DMS Substitutions Dataset": {
+        "paper_title": "ProteinGym: Large-Scale Benchmarks for Protein Design and Fitness Prediction",
+        "official_doi": "https://doi.org/10.1101/2023.12.07.570727",
         "files": ["DMS_ProteinGym_substitutions.zip"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/resolve/main/ProteinGym_DMS_substitutions/DMS_ProteinGym_substitutions.zip?download=true"
         ],
         "file_name": ["ProteinGym_DMS_substitutions.zip"],
     },
-    "HumanDomainome": {
-        "name": "Site-saturation mutagenesis of 500 human protein domains",
-        "official_url": "https://www.nature.com/articles/s41586-024-08370-4",
+    "Human Domainome Dataset": {
+        "paper_title": "Site-saturation mutagenesis of 500 human protein domains",
+        "official_doi": "https://doi.org/10.1038/s41586-024-08370-4",
         "files": [
             "SupplementaryTable2.txt",
-            "SupplementaryTable4.txt",
             "wild_type.fasta",
         ],
         "huggingface_repos": [
@@ -57,9 +56,9 @@ DATASETS = {
             },
         },
     },
-    "ddG_datasets": {
-        "name": "ddG_datasets",
-        "official_url": None,
+    "ΔΔG Dataset": {
+        "paper_title": "Improving the prediction of protein stability changes upon mutations by geometric learning and a pre-training strategy",
+        "official_doi": "https://doi.org/10.1038/s43588-024-00716-2",
         "files": ["M1261.csv", "S461.csv", "S669.csv", "S783.csv", "S8754.csv"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/resolve/main/ddG_datasets/M1261.csv?download=true",
@@ -113,18 +112,16 @@ DATASETS = {
             },
         },
     },
-    "dTm_datasets": {
-        "name": "dTm_datasets",
-        "official_url": None,
-        "files": ["S4346.csv", "S571.csv", "S557.csv"],
+    "ΔTm Dataset": {
+        "paper_title": "Improving the prediction of protein stability changes upon mutations by geometric learning and a pre-training strategy",
+        "official_doi": "https://doi.org/10.1038/s43588-024-00716-2",
+        "files": ["S4346.csv", "S557.csv"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/resolve/main/dTm_datasets/S4346.csv?download=true",
-            "datasets/xulab-research/TidyMut/resolve/main/dTm_datasets/S571.csv?download=true",
             "datasets/xulab-research/TidyMut/resolve/main/dTm_datasets/S557.csv?download=true",
         ],
         "file_name": [
             "S4346.csv",
-            "S571.csv",
             "S557.csv",
         ],
         "sub_datasets": {
@@ -135,13 +132,6 @@ DATASETS = {
                 ],
                 "file_name": ["S4346.csv"],
             },
-            "S571": {
-                "files": ["S571.csv"],
-                "huggingface_repos": [
-                    "datasets/xulab-research/TidyMut/resolve/main/dTm_datasets/S571.csv?download=true"
-                ],
-                "file_name": ["S571.csv"],
-            },
             "S557": {
                 "files": ["S557.csv"],
                 "huggingface_repos": [
@@ -151,27 +141,27 @@ DATASETS = {
             },
         },
     },
-    "ArchStabMS1E10_datasets": {
-        "name": "ArchStabMS1E10_datasets",
-        "official_url": "https://www.nature.com/articles/s41586-024-07966-0",
+    "ArchStabMS1E10 Epistasis Dataset": {
+        "paper_title": "The genetic architecture of protein stability",
+        "official_doi": "https://doi.org/10.1038/s41586-024-07966-0",
         "files": ["Supplementary Table 4"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/blob/main/ArchStabMS1E10/ArchStabMS_1E10.csv?download=true"
         ],
         "file_name": ["ArchStabMS_1E10.csv"],
     },
-    "Human_Myoglobin_datasets":{
-        "name": "Human_Myoglobin_datasets",
-        "official_url": "https://europepmc.org/article/ppr/ppr811402",
+    "Human Myoglobin Epistasis Dataset":{
+        "paper_title": "Decoding Stability and Epistasis in Human Myoglobin by Deep Mutational Scanning and Codon-level Machine Learning",
+        "official_doi": "https://doi.org/10.1101/2024.02.24.581358",
         "files": ["CODON_DATASET_Myoglobin.tsv"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/blob/main/HumanMyoglobin/Human_Myoglobin.csv?download=true"
         ],
         "file_name": ["Human_Myoglobin.csv"],
     },
-    "CTXM":{
-        "name": "CTX-M_datasets",
-        "official_url": "https://www.pnas.org/doi/10.1073/pnas.2313513121",
+    "CTXM Epistasis Dataset":{
+        "paper_title": "CTX-M_datasets",
+        "official_doi": "https://doi.org/10.1073/pnas.2313513121",
         "files": [
             "github.com/Palzkill-Lab/CTXM_epistasis/blob/main/fitness_data/Doubles_A3_processed.txt",
             "github.com/Palzkill-Lab/CTXM_epistasis/blob/main/fitness_data/Doubles_C2_processed.txt"
@@ -201,27 +191,27 @@ DATASETS = {
             }
         }
     },
-    "TrpB":{
-        "name": "TrpB_datasets",
-        "official_url": "https://www.pnas.org/doi/abs/10.1073/pnas.2400439121",
+    "TrpB Epistasis Dataset":{
+        "paper_title": "TrpB_datasets",
+        "official_doi": "https://doi.org/10.1073/pnas.2400439121",
         "files": ["huggingface.co/datasets/SaProtHub/Dataset-TrpB_fitness_landsacpe/blob/main/dataset.csv"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/blob/main/TrpB/TrpB.csv?download=true"
         ],
         "file_name": ["TrpB.csv"],
     },
-    "Antitoxin_ParD3":{
-        "name": "Antitoxin_ParD3_datasets",
-        "official_url": "https://www.nature.com/articles/s41559-022-01688-0",
+    "Antitoxin ParD3 Epistasis Dataset":{
+        "paper_title": "Antitoxin_ParD3_datasets",
+        "official_doi": "https://doi.org/10.1038/s41467-024-45621-4",
         "files": ["github.com/ddingding/CoVES/blob/main/data/DMS_data/df_mut_all_norm.csv"],
         "huggingface_repos": [
             "datasets/xulab-research/TidyMut/blob/main/AntitoxinParD3/Antitoxin_ParD3.csv?download=true"
         ],
         "file_name": ["Antitoxin_ParD3.csv"],
     },
-    "RBD_Antibody": {
-        "name": "RBD_Antibody_datasets",
-        "official_url": None,
+    "RBD Antibody Dataset": {
+        "paper_title": "RBD_Antibody_datasets",
+        "official_doi": None,
         "files": [
             "SARS-CoV-2-RBD_MAP_AZ_Abs_scores.csv",
             "SARS-CoV-2-RBD_MAP_HAARVI_sera_scores.csv",
@@ -291,9 +281,9 @@ DATASETS = {
             },
         },
     },
-    "RBD_ACE2": {
-        "name": "RBD_ACE2_datasets",
-        "official_url": None,
+    "RBD ACE2 Dataset": {
+        "paper_title": "RBD_ACE2_datasets",
+        "official_doi": None,
         "files": [
             "SARS-CoV-2-RBD_DMS_Omicron-EG5-FLip-BA286_bc_binding.csv",
             "SARS-CoV-2-RBD_DMS_Omicron-XBB-BQ_bc_binding.csv",
@@ -369,14 +359,22 @@ def list_datasets_with_built_in_cleaners() -> None:
 
     Predefined datasets:
 
-    - cDNAProteolysis
-    - ProteinGym
-    - HumanDomainome
+    - cDNA Proteolysis Dataset
+    - ProteinGym DMS Substitutions Dataset
+    - Human Domainome Dataset
+    - ΔΔG Dataset
+    - ΔTm Dataset
+    - Antitoxin ParD3 Epistasis Dataset
+    - TrpB Epistasis Dataset
+    - Human Myoglobin Epistasis Dataset
+    - CTXM Epistasis Dataset
+    - RBD Antibody Dataset
+    - RBD ACE2 Dataset
     """
     print("Public datasets with ready-to-use cleaning pipelines:")
     for key, info in DATASETS.items():
-        print(f"- {key}: {info['name']}")
-        print(f"  - Official URL: {info['official_url']}")
+        print(f"- {key}: {info['paper_title']}")
+        print(f"  - Official DOI: {info['official_doi']}")
     print(
         "\nUse the `show_download_instructions` function to see detailed download instructions."
     )
@@ -390,7 +388,7 @@ def show_download_instructions(dataset_key: str) -> None:
     if not info:
         raise KeyError(f"Dataset key not found: {dataset_key}")
 
-    print(f"Dataset: {info['name']}")
+    print(f"Dataset: {info['paper_title']}")
     for i, file in enumerate(info["files"]):
         print(f"  - File: {file}")
         print(f"    - Download link: {info['huggingface_repos'][i]}")
