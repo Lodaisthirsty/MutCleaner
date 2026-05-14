@@ -1,4 +1,4 @@
-# tidymut/cleaners/basic_cleaners.py
+# mutcleaner/cleaners/basic_cleaners.py
 from __future__ import annotations
 
 import numpy as np

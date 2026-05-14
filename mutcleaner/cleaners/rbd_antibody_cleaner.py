@@ -59,7 +59,7 @@ class RBDAntibodyCleanerConfig(BaseCleanerConfig):
     Attributes
     ----------
     column_mapping : Dict[str, str]
-        Mapping from raw antibody table columns to tidymut standard columns.
+        Mapping from raw antibody table columns to mutcleaner standard columns.
     filters : Dict[str, Callable]
         Filter conditions used to remove rows that fail score or QC checks.
     drop_na_columns : List[str]

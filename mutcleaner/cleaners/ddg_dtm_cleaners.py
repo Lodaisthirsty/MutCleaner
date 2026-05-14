@@ -1,4 +1,4 @@
-# tidymut/cleaners/ddg_dtm_cleaners.py
+# mutcleaner/cleaners/ddg_dtm_cleaners.py
 from __future__ import annotations
 
 import pandas as pd
@@ -46,7 +46,7 @@ class DdgDtmCleanerConfig(BaseCleanerConfig):
     Configuration class for ddG-dTm dataset cleaner.
     Inherits from BaseCleanerConfig and adds ddG-dTm-specific configuration options.
 
-    Simply run `tidymut.download_ddg_dtm_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_ddg_dtm_source_file()` to download the dataset.
 
     Alternatively, the raw ddG-dTm files can be obtained from:
 

@@ -1,4 +1,4 @@
-# tidymut/cleaners/antitoxin_pard3_cleaner.py
+# mutcleaner/cleaners/antitoxin_pard3_cleaner.py
 from __future__ import annotations
 
 import pandas as pd
@@ -52,7 +52,7 @@ class AntitoxinParD3CleanerConfig(BaseCleanerConfig):
     Configuration class for Antitoxin dataset cleaner.
     Inherits from BaseCleanerConfig and adds Antitoxin-specific configuration options.
 
-    Simply run `tidymut.download_antitoxin_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_antitoxin_source_file()` to download the dataset.
 
     Alternatively, the raw Antitoxin file can be obtained from:
 

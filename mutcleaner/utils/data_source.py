@@ -1,7 +1,7 @@
 # mutcleaner/utils/data_source.py
 
 DATASETS = {
-    "cDNAProteolysis": {
+    "cDNA Proteolysis Dataset": {
         "name": "Mega-scale experimental analysis of protein folding stability in biology and design",
         "official_url": "https://zenodo.org/records/7992926",
         "files": [

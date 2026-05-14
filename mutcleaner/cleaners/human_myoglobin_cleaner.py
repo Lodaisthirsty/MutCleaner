@@ -1,4 +1,4 @@
-# tidymut/cleaners/gb_cleaner.py
+# mutcleaner/cleaners/gb_cleaner.py
 from __future__ import annotations
 
 import pandas as pd
@@ -48,7 +48,7 @@ class HumanMyoglobinCleanerConfig(BaseCleanerConfig):
     Configuration class for human Myoglobin dataset cleaner.
     Inherits from BaseCleanerConfig and adds hMb-specific configuration options.
 
-    Simply run `tidymut.download_hMb_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_hMb_source_file()` to download the dataset.
 
     Alternatively, the raw hMb file can be obtained from:
 

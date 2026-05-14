@@ -1,4 +1,4 @@
-# tidymut/cleaners/human_domainome_sup4_cleaner.py
+# mutcleaner/cleaners/human_domainome_sup4_cleaner.py
 from __future__ import annotations
 
 import logging
@@ -50,7 +50,7 @@ class HumanDomainomeSup4CleanerConfig(BaseCleanerConfig):
     Configuration class for HumanDomainome dataset cleaner - SupplementaryTable4.
     Inherits from BaseCleanerConfig and adds HumanDomainome-specific configuration options.
 
-    Simply run `tidymut.download_human_domainome_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_human_domainome_source_file()` to download the dataset.
 
     Alternatively, the raw HumanDomainome file can be obtained from:
 

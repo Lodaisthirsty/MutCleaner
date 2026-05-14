@@ -1,6 +1,5 @@
 """Dataset-specific cleaning pipelines for MutCleaner."""
 
-
 from .cdna_proteolysis_cleaner import (
     CDNAProteolysisCleanerConfig,
     create_cdna_proteolysis_cleaner,

@@ -60,7 +60,7 @@ class RBDACE2CleanerConfig(BaseCleanerConfig):
     Attributes
     ----------
     column_mapping : Dict[str, str]
-        Mapping from raw RBD ACE2 binding table columns to tidymut standard columns.
+        Mapping from raw RBD ACE2 binding table columns to mutcleaner standard columns.
     filters : Dict[str, Callable]
         Filter conditions used to remove rows with invalid labels or targets.
     drop_na_columns : List[str]

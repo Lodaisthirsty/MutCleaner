@@ -49,7 +49,7 @@ class CDNAProteolysisCleanerConfig(BaseCleanerConfig):
     Configuration class for cDNAProteolysis dataset cleaner.
     Inherits from BaseCleanerConfig and adds cDNAProteolysis-specific configuration options.
 
-    Simply run `tidymut.download_cdna_proteolysis_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_cdna_proteolysis_source_file()` to download the dataset.
 
     Alternatively, the raw cDNAProteolysis file can be obtained from:
 

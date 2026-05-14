@@ -1,4 +1,4 @@
-# tidymut/cleaners/archstabms_1e10_cleaner.py
+# mutcleaner/cleaners/archstabms_1e10_cleaner.py
 from __future__ import annotations
 
 import pandas as pd
@@ -45,7 +45,7 @@ class ArchStabMS1E10CleanerConfig(BaseCleanerConfig):
     Configuration class for ArchStabMS1E10 dataset cleaner.
     Inherits from BaseCleanerConfig and adds ArchStabMS1E10-specific configuration options.
 
-    Simply run `tidymut.download_archstabms1e10_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_archstabms1e10_source_file()` to download the dataset.
 
     Alternatively, the raw archstabms1e10 file can be obtained from:
 

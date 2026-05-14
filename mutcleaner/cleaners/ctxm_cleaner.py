@@ -1,4 +1,4 @@
-# tidymut/cleaners/CTXM_cleaners.py
+# mutcleaner/cleaners/CTXM_cleaners.py
 from __future__ import annotations
 
 import pandas as pd
@@ -46,7 +46,7 @@ class CTXMCleanerConfig(BaseCleanerConfig):
     Configuration class for CTXM dataset cleaner.
     Inherits from BaseCleanerConfig and adds CTXM-specific configuration options.
 
-    Simply run `tidymut.download_ctxm_source_file()` to download the dataset.
+    Simply run `mutcleaner.download_ctxm_source_file()` to download the dataset.
 
     Alternatively, the raw CTXM file can be obtained from:
 

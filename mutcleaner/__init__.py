@@ -1,4 +1,4 @@
-# tidymut/__init__.py
+# mutcleaner/__init__.py
 """
 TidyMut: A Python package for cleaning protein mutation data
 """

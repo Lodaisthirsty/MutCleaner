@@ -1,4 +1,4 @@
-# tidymut/cleaners/TrpB_cleaner.py
+# mutcleaner/cleaners/TrpB_cleaner.py
 from __future__ import annotations
 
 import pandas as pd

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 __all__ = [
     "download",
     "download_cdna_proteolysis_source_file",
-    "download_protein_gym_source_file",
+    "download_proteingym_source_file",
     "download_human_domainome_source_file",
     "download_rbd_antibody_source_file",
     "download_rbd_ace2_source_file",
@@ -34,8 +34,8 @@ HF_ENDPOINTS: Sequence[str] = (
     "https://huggingface.co/",
     "https://hf-mirror.com/",
 )
-# 创建隐藏文件夹和配置文件路径
-CONFIG_DIR = Path(sys.prefix) / ".tidymut"
+
+CONFIG_DIR = Path(sys.prefix) / ".mutcleaner"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 CONFIG_KEY = "hf_endpoint"
 
@@ -68,7 +68,6 @@ def _save_cached_endpoint(endpoint: str) -> None:
 
 def _reachable(url: str, *, timeout: int = 4) -> bool:
     try:
-        # 发送 HEAD 请求检查 URL 是否可达
         response = requests.head(url, timeout=timeout)
         # 检查服务器返回的状态
         response.raise_for_status()
@@ -398,7 +397,6 @@ def download_source_file_from_huggingface(
                     f"File already exists: {local_path}. Use overwrite=True to replace it."
                 )
             else:
-                # 删除旧的文件以便重新下载
                 local_path.unlink()
         print(url)
         download(url, local_path)
@@ -423,7 +421,7 @@ def download_cdna_proteolysis_source_file(
     )
 
 
-def download_protein_gym_source_file(
+def download_proteingym_source_file(
     dir: str, *, overwrite: bool = False
 ) -> Dict[str, str]:
     """
