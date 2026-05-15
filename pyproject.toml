@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=77.0.3", "setuptools_scm[toml]>=7.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mutcleaner"
+dynamic = ["version"]
+description = "An efficient framework for cleaning, standardizing, and processing biological mutation data."
+readme = "README.md"
+authors = [
+    { name = "Yuxiang Tang" },
+    { name = "Ziyu Shi" },
+]
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+requires-python = ">=3.13"
+dependencies = [
+    "joblib>=1.5.0",
+    "numpy>=2.1.0",
+    "pandas>=2.2.0",
+    "tqdm>=4.60.0",
+    "requests>=2.30",
+    "openpyxl>=3.1.0"
+]
+keywords = [
+    "mutation",
+    "sequence",
+    "bioinformatics",
+    "data-cleaning",
+    "standardization",
+    "protein",
+    "codon",
+    "DNA",
+    "RNA",
+    "DMS",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Repository = "https://github.com/xulab-research/MutCleaner"
+
+[project.optional-dependencies]
+test = ["pytest>=8.0.0", "pytest-cov>=6.0.0"]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=6.0.0",
+    "sphinx>=8.0.0",
+    "sphinx-autobuild>=2024.10.0",
+    "pydata-sphinx-theme",
+    "twine>=6.0.0", 
+    "gitpython", 
+    "pygithub", 
+    "jinja2",
+    "numpydoc",
+    "myst_parser",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_autodoc_typehints",
+]
+
+[tool.setuptools]
+packages = ["mutcleaner"]
+
+[tool.setuptools_scm]
+version_scheme = "no-guess-dev"
+local_scheme = "no-local-version"
+
+[tool.setuptools.package-data]
+mutcleaner = ["py.typed"]
