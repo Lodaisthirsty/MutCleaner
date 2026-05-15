@@ -41,7 +41,7 @@ except ImportError:
     print("pip install gitpython pygithub jinja2")
     sys.exit(1)
 
-# 可配置的机器人名单
+
 BOTS_TO_IGNORE = {
     "Homu",
     "dependabot-preview",
@@ -51,7 +51,7 @@ BOTS_TO_IGNORE = {
     "pre-commit-ci[bot]",
 }
 
-# PR 分类规则
+
 CATEGORY_RULES = {
     "breaking": {
         "keywords": ["breaking", "breaking change", "breaking-change", "bc", "💥"],
@@ -105,7 +105,7 @@ CATEGORY_RULES = {
     },
 }
 
-# 模板定义
+
 TEMPLATES = {
     "keepachangelog": """# Changelog
 
