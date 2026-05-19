@@ -1,72 +1,8 @@
+# Supported Datasets
 
+## Human Domainome Dataset
 
-## Overview
-
-This guide provides usage examples for data cleaning modules organized by dataset source:
-
-- [**Human Domainome Dataset**](#human-domainome-dataset): Site-saturation mutagenesis of 500 human protein domains.
-- [**ProteinGym DMS Substitutions Dataset**](#proteingym-dms-substitutions-dataset): Large-scale benchmarks for protein design and fitness prediction.
-- [**cDNA Proteolysis Dataset**](#cdna-proteolysis-dataset): Mega-scale experimental analysis of protein folding stability in biology and design.
-- [**ddG-dTm Dataset**](#ddg-dtm-dataset): A collection of datasets providing single- and multiple-mutant measurements, labeled by the thermodynamic parameter (ΔΔG or ΔTm).
-- [**ArchStabMS1E10 Epistasis Dataset**](#archstabms1e10-epistasis-dataset): High-order multi-mutant libraries (“1e10”) measuring protein stability for GRB2-SH3 and SRC.
-- [**Antitoxin ParD3 Epistasis Dataset**](#antitoxin-pard3-epistasis-dataset): The antitoxin ParD3 3-position library is a combinatorially exhaustive dataset of 8,000 variants demonstrating that simple, independent per-residue mutation preferences are sufficient to almost perfectly predict combinatorial protein fitness.
-- [**TrpB Epistasis Dataset**](#trpb-epistasis-dataset): A combinatorially complete sequence-fitness landscape comprising 160,000 variants across four active-site residues of the enzyme tryptophan synthase, capturing significant epistatic interactions to serve as a benchmark for model-guided enzyme engineering.
-- [**Human Myoglobin Epistasis Dataset**](#human-myoglobin-epistasis-dataset): A deep mutational scanning library detailing the expression fitness scores for near-comprehensive single-codon mutations and a small fraction of double-codon mutations in yeast surface-displayed human myoglobin, which was used to train machine learning models for predicting epistatic effects and discovering stability-enhancing variants.
-- [**CTXM Epistasis Dataset**](#ctxm-epistasis-dataset): A large-scale pairwise deep mutational scanning dataset of the CTX-M-14 β-lactamase active site, covering 49,096 double mutants across 17 active-site residues. Fitness measurements were obtained from functional selection under ampicillin and cefotaxime, providing substrate-dependent fitness landscapes for studying epistasis, compensatory mutations, and antibiotic resistance prediction.
-- [**RBD-ACE2 Dataset**](#rbd-ace2-dataset): SARS-CoV-2 RBD sequences with ACE2 binding affinity scores, labeled by `log10Ka` where higher values indicate stronger ACE2 binding affinity.
-- [**RBD-Antibody Dataset**](#rbd-antibody-dataset): SARS-CoV-2 RBD antibody escape data with `score` computed as the negative logarithm of escape. Higher scores indicate weaker escape, reflecting better binding capacity.
-
----
-
-## Installation
-
-```bash
-pip install mutcleaner
-```
-
----
-
-
-## Common Workflow
-
-### Workflow Overview
-
-```mermaid
-flowchart LR
-    A["Download / prepare<br/>source dataset"] --> B["Create<br/>cleaner"]
-    B --> C["Run<br/>cleaning pipeline"]
-
-    C --> D["Save<br/>cleaned dataset"]
-    D --> E["Use for<br/>downstream analysis"]
-
-    C --> F["Save<br/>cleaning artifacts"]
-    F --> G["Review<br/>filtered records"]
-```
-### Workflow Steps
-
-Most dataset cleaners follow the same workflow:
-
-1. Download or prepare the source dataset.
-2. Create a dataset-specific cleaning pipeline with `create_*_cleaner`.
-3. Run the cleaning pipeline with `clean_*_dataset`.
-4. Save the cleaned standardized dataset.
-5. Save cleaning artifacts for reproducibility.
-6. Optionally export cleaning artifacts to CSV files for inspection.
-
-### Returned Objects
-
-The cleaning process usually returns two objects:
-
-- `cleaning_pipeline`: the fitted cleaning pipeline, including intermediate cleaning artifacts.
-- `cleaned_dataset`: the standardized cleaned dataset that can be saved and used for downstream analysis.
-
----
-
-## Supported Datasets
-
-### Human Domainome Dataset
-
-#### Basic Usage
+### Basic Usage
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned Human Domainome dataset, and exporting the
 cleaning artifacts: 
@@ -117,13 +53,13 @@ if __name__ == "__main__":
 
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.HumanDomainomeSup2CleanerConfig` for details.
 
-### ProteinGym DMS Substitutions Dataset
+## ProteinGym DMS Substitutions Dataset
 
-#### Basic Usage
+### Basic Usage
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned ProteinGym DMS substitutions dataset, and exporting the
 cleaning artifacts:
@@ -173,14 +109,14 @@ if __name__ == "__main__":
     main()
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.ProteinGymCleanerConfig` for details.
 
-### cDNA Proteolysis Dataset
+## cDNA Proteolysis Dataset
 
 
-#### ΔΔG as Label (Default Pipeline)
+### ΔΔG as Label (Default Pipeline)
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned cDNA Proteolysis dataset, and exporting the
@@ -232,7 +168,7 @@ if __name__ == "__main__":
     main()
 ```
 
-#### ΔG as Label
+### ΔG as Label
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned cDNA Proteolysis dataset, and exporting the
@@ -290,12 +226,12 @@ if __name__ == "__main__":
     main()
 ```
 
-#### Advanced Settings
+### Advanced Settings
 See {py:class}`mutcleaner.cleaners.CDNAProteolysisCleanerConfig` for details.
 
-### ddG-dTm Dataset
+## ddG-dTm Dataset
 
-#### Basic Usage
+### Basic Usage
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned ΔΔG-ΔTm dataset, and exporting the
@@ -349,14 +285,14 @@ if __name__ == "__main__":
 
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.DdgDtmCleanerConfig` for details.
 
 
-### ArchStabMS1E10 Epistasis Dataset
+## ArchStabMS1E10 Epistasis Dataset
 
-#### Basic Usage
+### Basic Usage
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned ArchStabMS1E10 Epistasis dataset, and exporting the
@@ -407,13 +343,13 @@ if __name__ == "__main__":
     main()
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.ArchStabMS1E10CleanerConfig` for details.
 
-### Antitoxin ParD3 Epistasis Dataset
+## Antitoxin ParD3 Epistasis Dataset
 
-#### Basic Usage
+### Basic Usage
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned Antitoxin ParD3 Epistasis dataset, and exporting the
@@ -465,13 +401,13 @@ if __name__ == "__main__":
 
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.AntitoxinParD3CleanerConfig` for details.
 
-### TrpB Epistasis Dataset
+## TrpB Epistasis Dataset
 
-#### Basic Usage
+### Basic Usage
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned TrpB Epistasis dataset, and exporting the
@@ -523,13 +459,13 @@ if __name__ == "__main__":
 
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.TrpBCleanerConfig` for details.
 
-### Human Myoglobin Epistasis Dataset
+## Human Myoglobin Epistasis Dataset
 
-#### Basic Usage
+### Basic Usage
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned Human Myoglobin Epistasis dataset, and exporting the
@@ -580,14 +516,14 @@ if __name__ == "__main__":
     main()
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.HumanMyoglobinCleanerConfig` for details.
 
-### CTXM Epistasis Dataset
+## CTXM Epistasis Dataset
 
 
-#### CTXM Ampicillin Epistasis Dataset
+### CTXM Ampicillin Epistasis Dataset
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned CTXM Ampicillin Epistasis Dataset, and exporting the
@@ -636,7 +572,7 @@ if __name__ == "__main__":
     main()
 ```
 
-#### CTXM Cefotaxime Epistasis Dataset
+### CTXM Cefotaxime Epistasis Dataset
 
 The following example shows the complete workflow for downloading, cleaning,
 saving the cleaned CTXM Cefotaxime Epistasis Dataset, and exporting the
@@ -686,14 +622,14 @@ if __name__ == "__main__":
     main()
 ```
 
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.CTXMCleanerConfig` for details.
 
 
-### RBD-ACE2 Dataset
+## RBD-ACE2 Dataset
 
-#### Basic Usage
+### Basic Usage
 
 You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_rbd_ace2_source_file` for details):
 ```python
@@ -720,31 +656,14 @@ Supported sub-datasets:
 
 Alternatively, you can download it from [Hugging Face](https://huggingface.co/datasets/Zoey13891350636/RBD_ACE2).
 
-#### Basic Usage
 
-```python
-from mutcleaner import download_rbd_ace2_source_file
-from mutcleaner.cleaners import clean_rbd_ace2_dataset, create_rbd_ace2_cleaner
-
-file_paths = download_rbd_ace2_source_file(
-    "path/to/target/folder",
-    sub_dataset="Omicron_EG5_FLip_BA286",
-)
-dataset_file_path = next(iter(file_paths.values()))
-
-rbd_ace2_cleaning_pipeline = create_rbd_ace2_cleaner(dataset_file_path)
-rbd_ace2_cleaning_pipeline, rbd_ace2_dataset = clean_rbd_ace2_dataset(
-    rbd_ace2_cleaning_pipeline
-)
-```
-
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.RBDACE2CleanerConfig` for details.
 
-### RBD-Antibody Dataset
+## RBD-Antibody Dataset
 
-#### Basic Usage
+### Basic Usage
 
 You can download the source file directly by running (see {py:func}`mutcleaner.utils.download_rbd_antibody_source_file` for details):
 ```python
@@ -772,24 +691,8 @@ Supported sub-datasets:
 
 Alternatively, you can download it from [Hugging Face](https://huggingface.co/datasets/Zoey13891350636/RBD_Antibody).
 
-#### Basic Usage
 
-```python
-from mutcleaner import download_rbd_antibody_source_file
-from mutcleaner.cleaners import clean_rbd_antibody_dataset, create_rbd_antibody_cleaner
 
-file_paths = download_rbd_antibody_source_file(
-    "path/to/target/folder",
-    sub_dataset="AZ_Abs",
-)
-dataset_file_path = next(iter(file_paths.values()))
-
-rbd_antibody_cleaning_pipeline = create_rbd_antibody_cleaner(dataset_file_path)
-rbd_antibody_cleaning_pipeline, rbd_antibody_dataset = clean_rbd_antibody_dataset(
-    rbd_antibody_cleaning_pipeline
-)
-```
-
-#### Advanced Settings
+### Advanced Settings
 
 See {py:class}`mutcleaner.cleaners.RBDAntibodyCleanerConfig` for details.

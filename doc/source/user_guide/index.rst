@@ -6,5 +6,6 @@ User Guide
 .. toctree::
    :maxdepth: 2
 
-   cleaners
-   save_data
+   overview
+   common_workflow
+   supported_datasets
