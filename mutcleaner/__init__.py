@@ -36,7 +36,6 @@ from .cleaners import (
     ctxm_cleaner,
     trpb_cleaner,
     antitoxin_pard3_cleaner,
-    rbd_antibody_cleaner,
     rbd_ace2_cleaner,
 )
 
