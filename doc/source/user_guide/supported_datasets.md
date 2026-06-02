@@ -774,7 +774,7 @@ from mutcleaner.cleaners import (
 
 def main():
     # Prepare data
-    download_rbd_ace2_source_file("raw_dataset/RBD_ACE2_Dataset")
+    download_rbd_ace2_source_file("raw_dataset/RBD_ACE2_Dataset", overwrite=True)
 
     # File settings
     raw_data_dir = Path("raw_dataset/RBD_ACE2_Dataset")
@@ -861,7 +861,7 @@ from mutcleaner.cleaners import (
 
 def main():
     # Prepare data
-    download_rbd_antibody_source_file("raw_dataset/RBD_Antibody_Dataset")
+    download_rbd_antibody_source_file("raw_dataset/RBD_Antibody_Dataset", overwrite=True)
 
     # File settings
     raw_data_dir = Path("raw_dataset/RBD_Antibody_Dataset")
